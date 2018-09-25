@@ -1,5 +1,8 @@
 package com.wardziniak.aviation.importer.external.model
 
+import play.api.libs.json.{Json, OFormat}
+import play.api.libs.ws.BodyReadable
+
 case class Geography(latitude: BigDecimal, longitude: BigDecimal, altitude: BigDecimal, direction: BigDecimal)
 
 case class Speed(horizontal: BigDecimal, isGround: Int, vertical: BigDecimal)
@@ -21,6 +24,21 @@ case class FlightSnapshot(
   arrival: AirportCode,
   aircraft: Aircraft,
   flight: FlightNumber,
-  airlineCode: AirlineCode,
+  airline: AirlineCode,
   system: System,
   status: String)
+
+object FlightSnapshot {
+  implicit val GeographyFormat: OFormat[Geography] = Json.format[Geography]
+  implicit val SpeedFormat: OFormat[Speed] = Json.format[Speed]
+  implicit val AirportCodeFormat: OFormat[AirportCode] = Json.format[AirportCode]
+  implicit val AircraftCodeFormat: OFormat[Aircraft] = Json.format[Aircraft]
+  implicit val FlightNumberFormat: OFormat[FlightNumber] = Json.format[FlightNumber]
+  implicit val SystemFormat: OFormat[System] = Json.format[System]
+  implicit val AirlineCodeFormat: OFormat[AirlineCode] = Json.format[AirlineCode]
+  implicit val FlightSnapshotFormat: OFormat[FlightSnapshot] = Json.format[FlightSnapshot]
+
+  implicit val readableAsFlightSnapshot: BodyReadable[List[FlightSnapshot]] = BodyReadable { response =>
+    Json.fromJson[List[FlightSnapshot]](Json.parse(response.bodyAsBytes.toArray)).get
+  }
+}

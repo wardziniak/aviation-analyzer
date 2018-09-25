@@ -11,6 +11,8 @@ object Versions {
   lazy val scalaVersion = "2.12.1"
 
   lazy val scalaTest = "3.0.5"
+  lazy val specs2Mock = "4.3.4"
+  lazy val playMockWS = "2.6.6"
 
   lazy val kafka = "2.0.0"
 

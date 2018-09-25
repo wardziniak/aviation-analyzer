@@ -1,0 +1,166 @@
+[
+  {
+    "geography": {
+      "latitude": 42.6827,
+      "longitude": 28.7818,
+      "altitude": 10607,
+      "direction": 181
+    },
+    "speed": {
+      "horizontal": 746.46,
+      "isGround": 0,
+      "vertical": -18.72
+    },
+    "departure": {
+      "iataCode": "WAW",
+      "icaoCode": "EPWA"
+    },
+    "arrival": {
+      "iataCode": "IST",
+      "icaoCode": "LTBA"
+    },
+    "aircraft": {
+      "regNumber": "SPLND",
+      "icaoCode": "E195",
+      "icao24": "48ADA3",
+      "iataCode": "E195"
+    },
+    "airline": {
+      "iataCode": "LO",
+      "icaoCode": "LOT"
+    },
+    "flight": {
+      "iataNumber": "LO135",
+      "icaoNumber": "LOT135",
+      "number": "135"
+    },
+    "system": {
+      "updated": "1537879920",
+      "squawk": "4461"
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 63.6614,
+      "longitude": -20.6526,
+      "altitude": 12489.2,
+      "direction": 96.1
+    },
+    "speed": {
+      "horizontal": 1028.12,
+      "isGround": 0,
+      "vertical": 0
+    },
+    "departure": {
+      "iataCode": "LAX",
+      "icaoCode": "KLAX"
+    },
+    "arrival": {
+      "iataCode": "WAW",
+      "icaoCode": "EPWA"
+    },
+    "aircraft": {
+      "regNumber": "SPLRA",
+      "icaoCode": "B788",
+      "icao24": "48AE00",
+      "iataCode": "B788"
+    },
+    "airline": {
+      "iataCode": "LO",
+      "icaoCode": "LOT"
+    },
+    "flight": {
+      "iataNumber": "LO24",
+      "icaoNumber": "LOT24",
+      "number": "24"
+    },
+    "system": {
+      "updated": "1537879920",
+      "squawk": "2507"
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 52.0451,
+      "longitude": 21.4043,
+      "altitude": 1371.6,
+      "direction": 245.3
+    },
+    "speed": {
+      "horizontal": 509.652,
+      "isGround": 0,
+      "vertical": -23.4
+    },
+    "departure": {
+      "iataCode": "MSQ",
+      "icaoCode": "UMMS"
+    },
+    "arrival": {
+      "iataCode": "WAW",
+      "icaoCode": "EPWA"
+    },
+    "aircraft": {
+      "regNumber": "SPLNM",
+      "icaoCode": "E195",
+      "icao24": "48ADAC",
+      "iataCode": "E195"
+    },
+    "airline": {
+      "iataCode": "LO",
+      "icaoCode": "LOT"
+    },
+    "flight": {
+      "iataNumber": "LO706",
+      "icaoNumber": "LOT706",
+      "number": "706"
+    },
+    "system": {
+      "updated": "1537879920",
+      "squawk": "5655"
+    },
+    "status": "en-route"
+  },
+  {
+    "geography": {
+      "latitude": 50.6238,
+      "longitude": 24.5755,
+      "altitude": 10637.5,
+      "direction": 305.05
+    },
+    "speed": {
+      "horizontal": 780.444,
+      "isGround": 0,
+      "vertical": -18.72
+    },
+    "departure": {
+      "iataCode": "ODS",
+      "icaoCode": "UKOO"
+    },
+    "arrival": {
+      "iataCode": "WAW",
+      "icaoCode": "EPWA"
+    },
+    "aircraft": {
+      "regNumber": "SPLNB",
+      "icaoCode": "E190",
+      "icao24": "",
+      "iataCode": "E190"
+    },
+    "airline": {
+      "iataCode": "LO",
+      "icaoCode": "LOT"
+    },
+    "flight": {
+      "iataNumber": "LO7ED",
+      "icaoNumber": "LOT7ED",
+      "number": "7ED"
+    },
+    "system": {
+      "updated": "1537879920",
+      "squawk": "4650"
+    },
+    "status": "en-route"
+  }
+]
