@@ -2,7 +2,7 @@ package com.wardziniak.aviation.importer
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import com.wardziniak.aviation.importer.external.model.FlightSnapshot
+import com.wardziniak.aviation.importer.external.model.FlightSnapshotDTO
 import org.f100ded.play.fakews._
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mutable._
@@ -47,10 +47,10 @@ class StandaloneFakeWSRequestSpec(implicit ee: ExecutionEnv)
 //        case DELETE(url"http://localhost/delete") => Ok("delete")
       }
 
-      import com.wardziniak.aviation.importer.external.model.FlightSnapshot._
+      import com.wardziniak.aviation.importer.external.model.FlightSnapshotDTO._
 
       val d = ws.url("http://localhost/get").get.map(
-        response => response.body[List[FlightSnapshot]]
+        response => response.body[List[FlightSnapshotDTO]]
       )
 
 

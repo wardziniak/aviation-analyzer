@@ -4,13 +4,15 @@ object Dependencies {
 
   object Aviation {
     lazy val api: Seq[ModuleID] = Seq() ++ test
-    lazy val common: Seq[ModuleID] = Seq() ++ test
+    lazy val common: Seq[ModuleID] = Seq(avro4sCore, kafkaClient) ++ test
     lazy val importer: Seq[ModuleID] = Seq(playWsStandaloneJson, playWsStandalone, specs2Core, specs2Mock, playFakeWsStandalone) ++ test
   }
 
   lazy val playWsStandalone =  "com.typesafe.play" %% "play-ahc-ws-standalone" % Versions.playWsStandalone
   lazy val playWsStandaloneJson = "com.typesafe.play" %% "play-ws-standalone-json" % Versions.playWsStandalone
   lazy val playJson = "com.typesafe.play" %% "play-json" % "2.6.10"
+
+  lazy val avro4sCore = "com.sksamuel.avro4s" %% "avro4s-core" % Versions.Avro4sCore
 
   // Tests
   lazy val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest % Test

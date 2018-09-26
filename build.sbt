@@ -14,6 +14,7 @@ lazy val `aviation-common` = project.
   settings(libraryDependencies ++= Dependencies.Aviation.common)
 
 lazy val `aviation-importer` = project.
+  dependsOn(`aviation-api`).
   settings(description := "Aviation data importer").
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Importer).

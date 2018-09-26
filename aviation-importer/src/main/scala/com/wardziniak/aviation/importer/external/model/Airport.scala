@@ -1,6 +1,6 @@
 package com.wardziniak.aviation.importer.external.model
 
-case class Airport(
+case class AirportDTO(
   airportId: String,
   nameAirport: String,
   codeIataAirport: String,
