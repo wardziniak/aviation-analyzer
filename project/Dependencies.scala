@@ -5,7 +5,7 @@ object Dependencies {
   object Aviation {
     lazy val api: Seq[ModuleID] = Seq() ++ test
     lazy val common: Seq[ModuleID] = Seq(avro4sCore, kafkaClient) ++ test
-    lazy val importer: Seq[ModuleID] = Seq(playWsStandaloneJson, playWsStandalone, specs2Core, specs2Mock, playFakeWsStandalone) ++ test
+    lazy val importer: Seq[ModuleID] = Seq(playWsStandaloneJson, playWsStandalone, specs2Core, specs2Mock, playFakeWsStandalone, kafkaStreamsScala) ++ test
   }
 
   lazy val playWsStandalone =  "com.typesafe.play" %% "play-ahc-ws-standalone" % Versions.playWsStandalone
@@ -26,4 +26,5 @@ object Dependencies {
   // Kafka
   val kafkaClient: ModuleID = "org.apache.kafka" % "kafka-clients" % Versions.kafka
   val kafkaStreams: ModuleID = "org.apache.kafka" % "kafka-streams" % Versions.kafka
+  val kafkaStreamsScala: ModuleID = "org.apache.kafka" %% "kafka-streams-scala" % Versions.kafka
 }

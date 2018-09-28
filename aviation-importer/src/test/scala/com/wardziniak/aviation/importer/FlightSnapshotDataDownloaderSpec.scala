@@ -10,22 +10,22 @@ import scala.io.Source
 
 class FlightSnapshotDataDownloaderSpec(implicit ee: ExecutionEnv)
   extends Specification
-    with DefaultBodyWritables {
+    with DefaultBodyWritables with FlightSnapshotDataDownloader {
 
-  implicit val system = ActorSystem()
-  implicit val mat = ActorMaterializer()
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val mat: ActorMaterializer = ActorMaterializer()
+
+  val content: String = Source.fromResource("flights_data.json").mkString
+  val wsClient = StandaloneFakeWSClient {
+    case GET(url"http://localhost/get") => Ok(content)
+  }
 
   "FlightSnapshotDataDownloader" should {
 
     "parse json properly" in {
-      // preparing andpoint
-      val content = Source.fromResource("flights_data.json").mkString
-      val ws = StandaloneFakeWSClient {
-        case GET(url"http://localhost/get") => Ok(content)
-      }
 
       // test
-      val data = FlightSnapshotDataDownloader.download(wsClient = ws, url = "http://localhost/get")
+      val data = download(url = "http://localhost/get")
 
       // validation
       val splndFlitgh = data.map(t => t.find(_.aircraft.regNumber == "SPLND"))
