@@ -4,9 +4,9 @@ import com.wardziniak.aviation.api.model._
 import play.api.libs.json.{Json, OFormat}
 import play.api.libs.ws.BodyReadable
 
-case class GeographyDTO(latitude: BigDecimal, longitude: BigDecimal, altitude: BigDecimal, direction: BigDecimal) extends ExternalObject
+case class GeographyDTO(latitude: Double, longitude: Double, altitude: Double, direction: Double) extends ExternalObject
 
-case class SpeedDTO(horizontal: BigDecimal, isGround: Int, vertical: BigDecimal) extends ExternalObject
+case class SpeedDTO(horizontal: Double, isGround: Int, vertical: Double) extends ExternalObject
 
 case class AirportCodeDTO(iataCode: String, icaoCode: String) extends ExternalObject
 

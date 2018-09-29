@@ -8,18 +8,18 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait DataDownloader[ExternalFormat]{
 
-  implicit val readableAsExternalFormat: BodyReadable[ExternalFormat]
+  implicit val readableAsExternalFormat: BodyReadable[List[ExternalFormat]]
 
   val wsClient: StandaloneWSClient
 
   def download(url: String)
-    (implicit executor: ExecutionContext, materializer: ActorMaterializer): Future[ExternalFormat] = {
-    wsClient.url(url).get.map(response => response.body[ExternalFormat])
+    (implicit executor: ExecutionContext, materializer: ActorMaterializer): Future[List[ExternalFormat]] = {
+    wsClient.url(url).get.map(response => response.body[List[ExternalFormat]])
   }
 }
 
 
-trait FlightSnapshotDataDownloader extends DataDownloader[List[FlightSnapshotDTO]] {
+trait FlightSnapshotDataDownloader extends DataDownloader[FlightSnapshotDTO] {
   import com.wardziniak.aviation.importer.external.model.FlightSnapshotDTO.readableAsFlightSnapshot
   override implicit val readableAsExternalFormat: BodyReadable[List[FlightSnapshotDTO]] = readableAsFlightSnapshot
 }
