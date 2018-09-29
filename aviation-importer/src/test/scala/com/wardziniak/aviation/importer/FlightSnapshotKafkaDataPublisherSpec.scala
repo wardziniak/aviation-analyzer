@@ -10,8 +10,6 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
 import org.specs2.mutable._
 
-import scala.concurrent.ExecutionContext
-
 
 class FlightSnapshotKafkaDataPublisherSpec
   extends Specification
@@ -33,8 +31,10 @@ class FlightSnapshotKafkaDataPublisherSpec
           override val producer: KafkaProducer[String, FlightSnapshot] =
             new KafkaProducer[String, FlightSnapshot](props, new StringSerializer(), new GenericSerializer[FlightSnapshot])
           override val keyExtractor: FlightSnapshot => String = flight => flight.flightNumber.iata
-          override implicit val executor: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
         }
+
+
+        import scala.concurrent.ExecutionContext.Implicits.global
 
         val flight = FlightSnapshot(
           localization = Localization(latitude = 42.6827, longitude = 28.7818, altitude = 10607, direction = 181),
