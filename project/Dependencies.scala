@@ -11,7 +11,7 @@ object Dependencies {
       specs2Core,
       specs2Mock,
       playFakeWsStandalone,
-      embeddedKafka) ++ test
+      embeddedKafka, pureConfig) ++ test
   }
 
   lazy val playWsStandalone =  "com.typesafe.play" %% "play-ahc-ws-standalone" % Versions.playWsStandalone
@@ -19,6 +19,8 @@ object Dependencies {
   lazy val playJson = "com.typesafe.play" %% "pKafkaDataPublisherlay-json" % "2.6.10"
 
   lazy val avro4sCore = "com.sksamuel.avro4s" %% "avro4s-core" % Versions.Avro4sCore
+
+  lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % Versions.PureConfig
 
   // Tests
   lazy val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest % Test

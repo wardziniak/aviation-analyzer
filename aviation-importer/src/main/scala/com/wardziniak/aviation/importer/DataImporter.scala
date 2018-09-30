@@ -31,4 +31,9 @@ trait FlightSnapshotDataImporter
     with FlightSnapshotDataDownloader
     with DefaultFlightSnapshotKafkaDataPublisher {
   override implicit def asValue(dto: FlightSnapshotDTO): FlightSnapshot = FlightSnapshotDTO.asFlightSnapshot(dto)
+
+  def close = {
+    wsClient.close()
+    materializer.shutdown()
+  }
 }

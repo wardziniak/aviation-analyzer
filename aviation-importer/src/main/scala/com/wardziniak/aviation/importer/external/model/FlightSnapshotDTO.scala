@@ -52,7 +52,7 @@ object FlightSnapshotDTO {
   implicit def asSpeed(dto: SpeedDTO): Speed = Speed(
     horizontal = dto.horizontal,
     vertical = dto.vertical,
-    isGround = dto.isGround == 0)
+    isGround = dto.isGround != 0)
 
   implicit def asAirportCode(dto: AirportCodeDTO): AirportCode = AirportCode(
     iata = dto.iataCode,
