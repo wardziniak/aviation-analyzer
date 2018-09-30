@@ -7,6 +7,7 @@ import org.specs2.mutable._
 import play.api.libs.ws.DefaultBodyWritables
 
 import scala.io.Source
+import scala.language.reflectiveCalls
 
 class FlightSnapshotDataDownloaderSpec(implicit ee: ExecutionEnv)
   extends Specification
@@ -16,8 +17,9 @@ class FlightSnapshotDataDownloaderSpec(implicit ee: ExecutionEnv)
   implicit val mat: ActorMaterializer = ActorMaterializer()
 
   val content: String = Source.fromResource("flights_data.json").mkString
+  val flightUrl: String = "http://aviation-edge.com/v2/public/flights?key=someKey"
   val wsClient = StandaloneFakeWSClient {
-    case GET(url"http://localhost/get") => Ok(content)
+    case GET(url"$flightUrl") => Ok(content)
   }
 
   "FlightSnapshotDataDownloader" should {
@@ -25,7 +27,7 @@ class FlightSnapshotDataDownloaderSpec(implicit ee: ExecutionEnv)
     "parse json properly" in {
 
       // test
-      val data = download(url = "http://localhost/get")
+      val data = download(url = flightUrl)
 
       // validation
       val splndFlitgh = data.map(t => t.find(_.aircraft.regNumber == "SPLND"))
