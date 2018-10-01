@@ -2,8 +2,8 @@ package com.wardziniak.aviation.importer
 
 import akka.stream.ActorMaterializer
 import com.wardziniak.aviation.api.model.{FlightSnapshot, Value}
+import com.wardziniak.aviation.common.{DefaultFlightSnapshotKafkaDataPublisher, KafkaDataPublisher}
 import com.wardziniak.aviation.importer.external.model.{ExternalObject, FlightSnapshotDTO}
-import com.wardziniak.aviation.importer.external.{DefaultFlightSnapshotKafkaDataPublisher, KafkaDataPublisher}
 import org.apache.kafka.clients.producer.RecordMetadata
 
 import scala.concurrent.{ExecutionContext, Future}

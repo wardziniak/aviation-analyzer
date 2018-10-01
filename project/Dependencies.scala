@@ -4,7 +4,7 @@ object Dependencies {
 
   object Aviation {
     lazy val api: Seq[ModuleID] = Seq() ++ test
-    lazy val common: Seq[ModuleID] = Seq(avro4sCore, kafkaClient) ++ test
+    lazy val common: Seq[ModuleID] = Seq(avro4sCore, kafkaClient, scalaLogging, embeddedKafka, specs2Core) ++ test
     lazy val importer: Seq[ModuleID] = Seq(
       logbackClassic,
       playWsStandaloneJson,
@@ -42,5 +42,6 @@ object Dependencies {
   val kafkaStreamsScala: ModuleID = "org.apache.kafka" %% "kafka-streams-scala" % Versions.kafka
 
   // Logging
+  lazy val scalaLogging: ModuleID = "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging
   lazy val logbackClassic: ModuleID = "ch.qos.logback" % "logback-classic" % Versions.logbackClassic
 }

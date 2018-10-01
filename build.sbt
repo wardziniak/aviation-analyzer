@@ -8,6 +8,7 @@ lazy val `aviation-api` = project.
   settings(libraryDependencies ++= Dependencies.Aviation.api)
 
 lazy val `aviation-common` = project.
+  dependsOn(`aviation-api`).
   settings(description := "Aviation analyzer commons").
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Common).

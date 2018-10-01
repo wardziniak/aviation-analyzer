@@ -26,4 +26,5 @@ object Versions {
   lazy val playWsStandalone = "1.1.10"
 
   lazy val logbackClassic = "1.2.3"
+  lazy val scalaLogging = "3.9.0"
 }

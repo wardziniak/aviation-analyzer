@@ -1,4 +1,4 @@
-package com.wardziniak.aviation.importer.external
+package com.wardziniak.aviation.common
 
 import java.util.Properties
 

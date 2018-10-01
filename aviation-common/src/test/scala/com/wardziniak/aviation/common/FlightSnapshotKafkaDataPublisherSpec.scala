@@ -1,14 +1,13 @@
-package com.wardziniak.aviation.importer
+package com.wardziniak.aviation.common
 
 import java.util.Properties
 
 import com.wardziniak.aviation.api.model._
 import com.wardziniak.aviation.common.serialization.{GenericDeserializer, GenericSerializer}
-import com.wardziniak.aviation.importer.external.FlightSnapshotKafkaDataPublisher
 import net.manub.embeddedkafka.{EmbeddedKafka, EmbeddedKafkaConfig}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
-import org.specs2.mutable._
+import org.specs2.mutable.Specification
 
 
 class FlightSnapshotKafkaDataPublisherSpec
