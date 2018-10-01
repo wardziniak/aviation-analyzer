@@ -20,7 +20,7 @@ trait KafkaDataPublisher[KEY, VALUE <: Value] extends LazyLogging {
     val results = records
       .map(value => new ProducerRecord[KEY, VALUE](topic, keyExtractor(value), value))
       .map(record => Future {
-        logger.error("Sent message")
+        logger.debug(s"record: $record")
         producer.send(record).get()
       }
     )

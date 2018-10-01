@@ -24,4 +24,6 @@ object Versions {
   lazy val kafka = "2.0.0"
 
   lazy val playWsStandalone = "1.1.10"
+
+  lazy val logbackClassic = "1.2.3"
 }

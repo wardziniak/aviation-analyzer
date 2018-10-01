@@ -6,6 +6,7 @@ object Dependencies {
     lazy val api: Seq[ModuleID] = Seq() ++ test
     lazy val common: Seq[ModuleID] = Seq(avro4sCore, kafkaClient) ++ test
     lazy val importer: Seq[ModuleID] = Seq(
+      logbackClassic,
       playWsStandaloneJson,
       playWsStandalone,
       specs2Core,
@@ -13,7 +14,7 @@ object Dependencies {
       playFakeWsStandalone,
       embeddedKafka, pureConfig) ++ test
     lazy val analyzer: Seq[ModuleID] = Seq(
-      kafkaStreams, embeddedKafka, pureConfig
+      logbackClassic, kafkaStreams, embeddedKafka, pureConfig
     ) ++ test
   }
 
@@ -39,4 +40,7 @@ object Dependencies {
   val kafkaClient: ModuleID = "org.apache.kafka" % "kafka-clients" % Versions.kafka
   val kafkaStreams: ModuleID = "org.apache.kafka" % "kafka-streams" % Versions.kafka
   val kafkaStreamsScala: ModuleID = "org.apache.kafka" %% "kafka-streams-scala" % Versions.kafka
+
+  // Logging
+  lazy val logbackClassic: ModuleID = "ch.qos.logback" % "logback-classic" % Versions.logbackClassic
 }

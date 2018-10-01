@@ -1,6 +1,7 @@
 package com.wardziniak.aviation.importer
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+import com.typesafe.scalalogging.LazyLogging
 import org.f100ded.play.fakews.{Ok, StandaloneFakeWSClient, _}
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mutable._
@@ -11,7 +12,8 @@ import scala.language.reflectiveCalls
 
 class FlightSnapshotDataDownloaderSpec(implicit ee: ExecutionEnv)
   extends Specification
-    with DefaultBodyWritables with FlightSnapshotDataDownloader {
+    with DefaultBodyWritables with FlightSnapshotDataDownloader
+    with LazyLogging {
 
   implicit val system: ActorSystem = ActorSystem()
   implicit val mat: ActorMaterializer = ActorMaterializer()
@@ -25,6 +27,11 @@ class FlightSnapshotDataDownloaderSpec(implicit ee: ExecutionEnv)
   "FlightSnapshotDataDownloader" should {
 
     "parse json properly" in {
+
+      logger.trace("trace")
+      logger.debug("debug")
+      logger.info("info")
+      logger.error("error")
 
       // test
       val data = download(url = flightUrl)
