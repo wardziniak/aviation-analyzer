@@ -12,6 +12,9 @@ object Dependencies {
       specs2Mock,
       playFakeWsStandalone,
       embeddedKafka, pureConfig) ++ test
+    lazy val analyzer: Seq[ModuleID] = Seq(
+      kafkaStreams, embeddedKafka, pureConfig
+    ) ++ test
   }
 
   lazy val playWsStandalone =  "com.typesafe.play" %% "play-ahc-ws-standalone" % Versions.playWsStandalone

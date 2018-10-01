@@ -21,15 +21,10 @@ lazy val `aviation-importer` = project.
   settings(version := Versions.Aviation.Importer).
   settings(libraryDependencies ++= Dependencies.Aviation.importer)
 
-
-
-//lazy val root = (project in file(".")).
-//  settings(
-//    inThisBuild(List(
-//      organization := "com.example",
-//      scalaVersion := "2.12.6",
-//      version      := "0.1.0-SNAPSHOT"
-//    )),
-//    name := "aviation-analyzer",
-//    libraryDependencies += scalaTest % Test
-//  )
+lazy val `data-analyzer` = project.
+  dependsOn(`aviation-api`).
+  dependsOn(`aviation-common`).
+  settings(description := "Aviation data Analyzer").
+  settings(Common.Settings: _*).
+  settings(version := Versions.Aviation.Analyzer).
+  settings(libraryDependencies ++= Dependencies.Aviation.analyzer)

@@ -6,6 +6,7 @@ object Versions {
     lazy val Api = "0.1"
     lazy val Common = "0.1"
     lazy val Importer = "0.1"
+    lazy val Analyzer = "0.1"
   }
 
   lazy val scalaVersion = "2.12.1"
