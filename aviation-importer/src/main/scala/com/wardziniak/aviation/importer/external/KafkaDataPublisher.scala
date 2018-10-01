@@ -34,7 +34,7 @@ trait FlightSnapshotKafkaDataPublisher extends KafkaDataPublisher[String, Flight
 
 trait DefaultFlightSnapshotKafkaDataPublisher extends FlightSnapshotKafkaDataPublisher {
 
-  def kafkaServer: String = "localhost:9092"
+  def kafkaServer: String = KafkaDataPublisher.KafkaDefaultServer
 
   val props: Properties = {
     val props = new Properties()
@@ -43,17 +43,11 @@ trait DefaultFlightSnapshotKafkaDataPublisher extends FlightSnapshotKafkaDataPub
     props
   }
 
-//  def defaultProperties(kafkaServer: String) = {
-//    val props = new Properties()
-//    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer)
-//    props.put(ProducerConfig.CLIENT_ID_CONFIG, "clientId")
-//  }
-//
-//  def this(kafkaServer: String) = {
-//    this(defaultProperties(kafkaServer))
-//  }
-
   override val keyExtractor: FlightSnapshot => String = flight => flight.flightNumber.icao
   override val producer: KafkaProducer[String, FlightSnapshot] =
     new KafkaProducer[String, FlightSnapshot](props, new StringSerializer(), new GenericSerializer[FlightSnapshot])
+}
+
+object KafkaDataPublisher {
+  val KafkaDefaultServer = "localhost:9092"
 }

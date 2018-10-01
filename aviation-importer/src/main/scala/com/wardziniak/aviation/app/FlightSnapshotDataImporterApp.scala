@@ -13,10 +13,10 @@ import scala.concurrent.{Await, ExecutionContext}
 object FlightSnapshotDataImporterApp extends App {
   val config = ConfigLoader.loadConfig
 
-  implicit val system = ActorSystem("aviation-edge-actor-system")
+  implicit val system: ActorSystem = ActorSystem("aviation-edge-actor-system")
 
   val dataImporter = new FlightSnapshotDataImporter {
-    override def kafkaServer = config.kafka.server
+    override def kafkaServer: String = config.kafka.server
     override implicit val executor: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
     override implicit val materializer: ActorMaterializer = ActorMaterializer()
     override val wsClient: StandaloneWSClient = StandaloneAhcWSClient()
@@ -27,7 +27,7 @@ object FlightSnapshotDataImporterApp extends App {
   val results = dataImporter.importData(url = s"$flightUrl${config.serverKey}")(topic = config.kafka.mainTopic)
 
   Await.result(results, Duration.Inf)
-  dataImporter.close
+  dataImporter.close()
   val terminated = system.terminate()
   Await.result(terminated, Duration.Inf)
 }

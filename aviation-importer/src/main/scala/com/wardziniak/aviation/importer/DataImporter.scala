@@ -3,9 +3,10 @@ package com.wardziniak.aviation.importer
 import akka.stream.ActorMaterializer
 import com.wardziniak.aviation.api.model.{FlightSnapshot, Value}
 import com.wardziniak.aviation.importer.external.model.{ExternalObject, FlightSnapshotDTO}
-import com.wardziniak.aviation.importer.external.{DefaultFlightSnapshotKafkaDataPublisher, FlightSnapshotKafkaDataPublisher, KafkaDataPublisher}
+import com.wardziniak.aviation.importer.external.{DefaultFlightSnapshotKafkaDataPublisher, KafkaDataPublisher}
+import org.apache.kafka.clients.producer.RecordMetadata
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
 trait DataImporter[ExternalFormat <: ExternalObject,V <: Value] {
@@ -20,7 +21,7 @@ trait DataImporter[ExternalFormat <: ExternalObject,V <: Value] {
   implicit def asValueList(dtos: List[ExternalFormat]): List[V] = dtos.map(asValue)
 
 
-  def importData(url: String)(topic: String) = {
+  def importData(url: String)(topic: String): Future[Seq[RecordMetadata]] = {
     download(url).flatMap(rawRecords => publish(topic, rawRecords))
   }
 
@@ -32,7 +33,7 @@ trait FlightSnapshotDataImporter
     with DefaultFlightSnapshotKafkaDataPublisher {
   override implicit def asValue(dto: FlightSnapshotDTO): FlightSnapshot = FlightSnapshotDTO.asFlightSnapshot(dto)
 
-  def close = {
+  def close(): Unit = {
     wsClient.close()
     materializer.shutdown()
   }
