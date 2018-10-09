@@ -18,13 +18,18 @@ object Dependencies {
     ) ++ test
   }
 
+
+
+  // Play
   lazy val playWsStandalone =  "com.typesafe.play" %% "play-ahc-ws-standalone" % Versions.playWsStandalone
   lazy val playWsStandaloneJson = "com.typesafe.play" %% "play-ws-standalone-json" % Versions.playWsStandalone
   lazy val playJson = "com.typesafe.play" %% "pKafkaDataPublisherlay-json" % "2.6.10"
+  lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % Versions.PureConfig
 
+  // Serializer
   lazy val avro4sCore = "com.sksamuel.avro4s" %% "avro4s-core" % Versions.Avro4sCore
 
-  lazy val pureConfig = "com.github.pureconfig" %% "pureconfig" % Versions.PureConfig
+
 
   // Tests
   lazy val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest % Test

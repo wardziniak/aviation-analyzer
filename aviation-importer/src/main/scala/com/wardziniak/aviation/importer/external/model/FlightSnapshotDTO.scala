@@ -3,6 +3,7 @@ package com.wardziniak.aviation.importer.external.model
 import com.wardziniak.aviation.api.model._
 import play.api.libs.json.{Json, OFormat}
 import play.api.libs.ws.BodyReadable
+import scala.language.implicitConversions
 
 case class GeographyDTO(latitude: Double, longitude: Double, altitude: Double, direction: Double) extends ExternalObject
 
@@ -10,7 +11,7 @@ case class SpeedDTO(horizontal: Double, isGround: Int, vertical: Double) extends
 
 case class AirportCodeDTO(iataCode: String, icaoCode: String) extends ExternalObject
 
-case class AircraftDTO(regNumber: String, icaoCode: String, icao24: String, iataCode: String) extends ExternalObject
+case class AircraftBaseDTO(regNumber: String, icaoCode: String, icao24: String, iataCode: String) extends ExternalObject
 
 case class FlightNumberDTO(iataNumber: String, icaoNumber: String, number: String) extends ExternalObject
 
@@ -23,7 +24,7 @@ case class FlightSnapshotDTO(
   speed: SpeedDTO,
   departure: AirportCodeDTO,
   arrival: AirportCodeDTO,
-  aircraft: AircraftDTO,
+  aircraft: AircraftBaseDTO,
   flight: FlightNumberDTO,
   airline: AirlineCodeDTO,
   system: SystemDTO,
@@ -33,7 +34,7 @@ object FlightSnapshotDTO {
   implicit val GeographyFormat: OFormat[GeographyDTO] = Json.format[GeographyDTO]
   implicit val SpeedFormat: OFormat[SpeedDTO] = Json.format[SpeedDTO]
   implicit val AirportCodeFormat: OFormat[AirportCodeDTO] = Json.format[AirportCodeDTO]
-  implicit val AircraftCodeFormat: OFormat[AircraftDTO] = Json.format[AircraftDTO]
+  implicit val AircraftCodeFormat: OFormat[AircraftBaseDTO] = Json.format[AircraftBaseDTO]
   implicit val FlightNumberFormat: OFormat[FlightNumberDTO] = Json.format[FlightNumberDTO]
   implicit val SystemFormat: OFormat[SystemDTO] = Json.format[SystemDTO]
   implicit val AirlineCodeFormat: OFormat[AirlineCodeDTO] = Json.format[AirlineCodeDTO]
@@ -58,7 +59,7 @@ object FlightSnapshotDTO {
     iata = dto.iataCode,
     icao = dto.icaoCode)
 
-  implicit def asAircraft(dto: AircraftDTO): Aircraft = Aircraft(
+  implicit def asAircraft(dto: AircraftBaseDTO): Aircraft = Aircraft(
     regNumber = dto.regNumber,
     icao = dto.icaoCode,
     icao24 = dto.icao24,
