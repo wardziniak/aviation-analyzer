@@ -30,15 +30,8 @@ class AircraftDataDownloaderSpec (implicit ee: ExecutionEnv)
   "AircraftDataDownloader" should {
 
     "parse json properly" in {
-
-      logger.trace("trace")
-      logger.debug("debug")
-      logger.info("info")
-      logger.error("error")
-
       // test
       val data = download(url = flightUrl)
-
 
       // validation
       val dAIMAAircraft: Future[Option[AircraftDTO]] = data.map(t => t.find(_.numberRegistration == "D-AIMA"))
@@ -47,9 +40,6 @@ class AircraftDataDownloaderSpec (implicit ee: ExecutionEnv)
       dAIMAAircraft.map(_.head).map(_.numberRegistration) must beEqualTo("D-AIMA").await
       dAIMAAircraft.map(_.head).map(_.airplaneIataType) must beEqualTo("A380-800").await
       dAIMAAircraft.map(_.head).map(_.codeIataAirline) must beEqualTo("LH").await
-      //dAIMAAircraft.map(_.head).map(_.p)
-
-
       ok
     }
   }
