@@ -40,7 +40,7 @@ class FlightSnapshotKafkaDataPublisherSpec
           speed = Speed(horizontal = 746.46, isGround = false, vertical = -18.72),
           departure = AirportCode("WAW", "EPWA"),
           arrival = AirportCode("IST", "LTBA"),
-          aircraft = Aircraft(regNumber = "SPLND", icao = "E195", icao24 = "48ADA3", iata = "E195"),
+          aircraft = AircraftCode(regNumber = "SPLND", icao = "E195", icao24 = "48ADA3", iata = "E195"),
           flightNumber = FlightNumber(iata = "LO135", icao = "LOT135", number = "135"),
           airlineCode = AirlineCode(iata = "LO", icao = "LOT"),
           enRoute = "en-route",

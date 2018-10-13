@@ -70,3 +70,4 @@ project/plugins/project/
 *.log
 
 .idea/*
+/aviation-importer/src/main/resources/secret.conf

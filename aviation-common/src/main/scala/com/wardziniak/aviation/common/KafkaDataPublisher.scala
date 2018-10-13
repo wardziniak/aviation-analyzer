@@ -1,12 +1,8 @@
 package com.wardziniak.aviation.common
 
-import java.util.Properties
-
 import com.typesafe.scalalogging.LazyLogging
-import com.wardziniak.aviation.api.model.{FlightSnapshot, Value}
-import com.wardziniak.aviation.common.serialization.GenericSerializer
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord, RecordMetadata}
-import org.apache.kafka.common.serialization.StringSerializer
+import com.wardziniak.aviation.api.model.Value
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord, RecordMetadata}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,24 +25,6 @@ trait KafkaDataPublisher[KEY, VALUE <: Value] extends LazyLogging {
 }
 
 trait BasicKafkaDataPublisher[VALUE <: Value] extends KafkaDataPublisher[String, VALUE]
-
-trait FlightSnapshotKafkaDataPublisher extends KafkaDataPublisher[String, FlightSnapshot]
-
-trait DefaultFlightSnapshotKafkaDataPublisher extends FlightSnapshotKafkaDataPublisher {
-
-  def kafkaServer: String = KafkaDataPublisher.KafkaDefaultServer
-
-  val props: Properties = {
-    val props = new Properties()
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer)
-    props.put(ProducerConfig.CLIENT_ID_CONFIG, "clientId")
-    props
-  }
-
-  override val keyExtractor: FlightSnapshot => String = flight => flight.flightNumber.icao
-  override val producer: KafkaProducer[String, FlightSnapshot] =
-    new KafkaProducer[String, FlightSnapshot](props, new StringSerializer(), new GenericSerializer[FlightSnapshot])
-}
 
 object KafkaDataPublisher {
   val KafkaDefaultServer = "localhost:9092"

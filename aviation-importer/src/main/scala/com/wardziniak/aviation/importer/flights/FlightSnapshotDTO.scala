@@ -1,8 +1,10 @@
-package com.wardziniak.aviation.importer.external.model
+package com.wardziniak.aviation.importer.flights
 
 import com.wardziniak.aviation.api.model._
+import com.wardziniak.aviation.importer.external.model._
 import play.api.libs.json.{Json, OFormat}
 import play.api.libs.ws.BodyReadable
+
 import scala.language.implicitConversions
 
 case class GeographyDTO(latitude: Double, longitude: Double, altitude: Double, direction: Double) extends ExternalObject
@@ -59,7 +61,7 @@ object FlightSnapshotDTO {
     iata = dto.iataCode,
     icao = dto.icaoCode)
 
-  implicit def asAircraft(dto: AircraftBaseDTO): Aircraft = Aircraft(
+  implicit def asAircraft(dto: AircraftBaseDTO): AircraftCode = AircraftCode(
     regNumber = dto.regNumber,
     icao = dto.icaoCode,
     icao24 = dto.icao24,

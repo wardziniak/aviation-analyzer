@@ -15,13 +15,13 @@ case class Aircraft(
   codeIcaoAirline: String,
   enginesCount: Int,
   enginesType: String,
-  planeClasses: List[PlaneClass]
-)
+  planeClasses: Option[List[PlaneClass]]
+) extends Value
 
 sealed trait ClassType
 object Economy extends ClassType
 object Business extends ClassType
 object First extends ClassType
 
-case class PlaneClass(classType: ClassType, seats: Int, pitch: String, bedType: String)
+case class PlaneClass(classType: String, seats: Int, pitch: String, bedType: String)
 

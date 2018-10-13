@@ -2,6 +2,7 @@ package com.wardziniak.aviation.importer
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import com.typesafe.scalalogging.LazyLogging
+import com.wardziniak.aviation.importer.flights.FlightSnapshotDataDownloader
 import org.f100ded.play.fakews.{Ok, StandaloneFakeWSClient, _}
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mutable._

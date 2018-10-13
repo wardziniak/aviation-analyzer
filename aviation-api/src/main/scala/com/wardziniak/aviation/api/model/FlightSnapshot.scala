@@ -6,7 +6,7 @@ case class Speed(horizontal: Double, isGround: Boolean, vertical: Double)
 
 case class AirportCode(iata: String, icao: String)
 
-case class Aircraft(regNumber: String, icao: String, icao24: String, iata: String)
+case class AircraftCode(regNumber: String, icao: String, icao24: String, iata: String)
 
 case class FlightNumber(iata: String, icao: String, number: String)
 
@@ -17,7 +17,8 @@ case class FlightSnapshot(
   speed: Speed,
   departure: AirportCode,
   arrival: AirportCode,
-  aircraft: Aircraft,
+  aircraft: AircraftCode,
   flightNumber: FlightNumber,
   airlineCode: AirlineCode,
-  enRoute: String, updated: Long) extends Value
+  enRoute: String,
+  updated: Long) extends Value

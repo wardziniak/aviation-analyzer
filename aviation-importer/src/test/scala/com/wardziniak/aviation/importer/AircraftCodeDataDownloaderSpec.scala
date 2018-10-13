@@ -3,7 +3,7 @@ package com.wardziniak.aviation.importer
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import com.typesafe.scalalogging.LazyLogging
-import com.wardziniak.aviation.importer.external.model.AircraftDTO
+import com.wardziniak.aviation.importer.aircraft.{AircraftDTO, AircraftDataDownloader}
 import org.f100ded.play.fakews.{Ok, StandaloneFakeWSClient, _}
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mutable._
@@ -13,7 +13,7 @@ import scala.concurrent.Future
 import scala.io.Source
 import scala.language.reflectiveCalls
 
-class AircraftDataDownloaderSpec (implicit ee: ExecutionEnv)
+class AircraftCodeDataDownloaderSpec(implicit ee: ExecutionEnv)
   extends Specification
     with DefaultBodyWritables with AircraftDataDownloader
     with LazyLogging {

@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import com.wardziniak.aviation.api.model.FlightSnapshot
 import com.wardziniak.aviation.common.serialization.GenericDeserializer
+import com.wardziniak.aviation.importer.flights.FlightSnapshotDataImporter
 import net.manub.embeddedkafka.{EmbeddedKafka, EmbeddedKafkaConfig}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.f100ded.play.fakews.{Ok, StandaloneFakeWSClient, _}

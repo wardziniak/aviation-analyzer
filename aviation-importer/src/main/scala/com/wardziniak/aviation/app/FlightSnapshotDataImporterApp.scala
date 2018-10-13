@@ -2,8 +2,8 @@ package com.wardziniak.aviation.app
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import com.wardziniak.aviation.importer.FlightSnapshotDataImporter
 import com.wardziniak.aviation.importer.config.ConfigLoader
+import com.wardziniak.aviation.importer.flights.FlightSnapshotDataImporter
 import play.api.libs.ws.StandaloneWSClient
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
 

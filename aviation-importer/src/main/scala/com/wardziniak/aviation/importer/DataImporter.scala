@@ -1,9 +1,9 @@
 package com.wardziniak.aviation.importer
 
 import akka.stream.ActorMaterializer
-import com.wardziniak.aviation.api.model.{FlightSnapshot, Value}
-import com.wardziniak.aviation.common.{DefaultFlightSnapshotKafkaDataPublisher, KafkaDataPublisher}
-import com.wardziniak.aviation.importer.external.model.{ExternalObject, FlightSnapshotDTO}
+import com.wardziniak.aviation.api.model.Value
+import com.wardziniak.aviation.common.KafkaDataPublisher
+import com.wardziniak.aviation.importer.external.model.ExternalObject
 import org.apache.kafka.clients.producer.RecordMetadata
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,16 +25,4 @@ trait DataImporter[ExternalFormat <: ExternalObject,V <: Value] {
     download(url).flatMap(rawRecords => publish(topic, rawRecords))
   }
 
-}
-
-trait FlightSnapshotDataImporter
-  extends DataImporter[FlightSnapshotDTO, FlightSnapshot]
-    with FlightSnapshotDataDownloader
-    with DefaultFlightSnapshotKafkaDataPublisher {
-  override implicit def asValue(dto: FlightSnapshotDTO): FlightSnapshot = FlightSnapshotDTO.asFlightSnapshot(dto)
-
-  def close(): Unit = {
-    wsClient.close()
-    materializer.shutdown()
-  }
 }
