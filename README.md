@@ -14,6 +14,11 @@ Description of available data sets in the Aviation-Edge.
   * Flight tracker
   * Airport timetable
   * Airline routes 
+  * Airports
+  * Airlines
+  * Aircrafts
+  * Cities
+  * Countries
 * Databases to download
   * Airports
   * Airlines
