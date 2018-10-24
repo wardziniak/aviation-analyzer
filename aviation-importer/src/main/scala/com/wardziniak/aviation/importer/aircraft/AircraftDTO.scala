@@ -1,7 +1,7 @@
 package com.wardziniak.aviation.importer.aircraft
 
 import com.wardziniak.aviation.api.model.{Aircraft, PlaneClass}
-import com.wardziniak.aviation.importer.external.model.ExternalObject
+import com.wardziniak.aviation.importer.external.model.{DTO, ExternalObject}
 import play.api.libs.json.{Json, OFormat}
 import play.api.libs.ws.BodyReadable
 
@@ -23,9 +23,9 @@ case class AircraftDTO(
   enginesCount: String,
   enginesType: String,
   planeClasses: Option[List[PlaneClassDTO]]
-) extends ExternalObject
+) extends DTO
 
-case class PlaneClassDTO(name: String, seats: String, pitch: String, bedType: String) extends ExternalObject
+case class PlaneClassDTO(name: String, seats: String, pitch: String, bedType: String) extends DTO
 
 object AircraftDTO {
   implicit val PlaneClassFormat: OFormat[PlaneClassDTO] = Json.format[PlaneClassDTO]

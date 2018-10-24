@@ -3,13 +3,13 @@ package com.wardziniak.aviation.importer
 import akka.stream.ActorMaterializer
 import com.wardziniak.aviation.api.model.Value
 import com.wardziniak.aviation.common.KafkaDataPublisher
-import com.wardziniak.aviation.importer.external.model.ExternalObject
+import com.wardziniak.aviation.importer.external.model.{DTO, ExternalObject}
 import org.apache.kafka.clients.producer.RecordMetadata
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
-trait DataImporter[ExternalFormat <: ExternalObject,V <: Value] {
+trait DataImporter[ExternalFormat <: DTO,V <: Value] {
   self: DataDownloader[ExternalFormat]  with KafkaDataPublisher[String, V] =>
 
   implicit def asValue(dto: ExternalFormat): V

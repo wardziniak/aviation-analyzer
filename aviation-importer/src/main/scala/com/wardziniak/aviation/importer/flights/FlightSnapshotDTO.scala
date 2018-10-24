@@ -1,23 +1,23 @@
 package com.wardziniak.aviation.importer.flights
 
 import com.wardziniak.aviation.api.model._
-import com.wardziniak.aviation.importer.external.model._
+import com.wardziniak.aviation.importer.external.model.DTO
 import play.api.libs.json.{Json, OFormat}
 import play.api.libs.ws.BodyReadable
 
 import scala.language.implicitConversions
 
-case class GeographyDTO(latitude: Double, longitude: Double, altitude: Double, direction: Double) extends ExternalObject
+case class GeographyDTO(latitude: Double, longitude: Double, altitude: Double, direction: Double) extends DTO
 
-case class SpeedDTO(horizontal: Double, isGround: Int, vertical: Double) extends ExternalObject
+case class SpeedDTO(horizontal: Double, isGround: Int, vertical: Double) extends DTO
 
-case class AirportCodeDTO(iataCode: String, icaoCode: String) extends ExternalObject
+case class AirportCodeDTO(iataCode: String, icaoCode: String) extends DTO
 
-case class AircraftBaseDTO(regNumber: String, icaoCode: String, icao24: String, iataCode: String) extends ExternalObject
+case class AircraftBaseDTO(regNumber: String, icaoCode: String, icao24: String, iataCode: String) extends DTO
 
-case class FlightNumberDTO(iataNumber: String, icaoNumber: String, number: String) extends ExternalObject
+case class FlightNumberDTO(iataNumber: String, icaoNumber: String, number: String) extends DTO
 
-case class SystemDTO(updated: String, squawk: String) extends ExternalObject
+case class SystemDTO(updated: String, squawk: String) extends DTO
 
 case class AirlineCodeDTO(iataCode: String, icaoCode: String)
 
@@ -30,7 +30,7 @@ case class FlightSnapshotDTO(
   flight: FlightNumberDTO,
   airline: AirlineCodeDTO,
   system: SystemDTO,
-  status: String) extends ExternalObject
+  status: String) extends DTO
 
 object FlightSnapshotDTO {
   implicit val GeographyFormat: OFormat[GeographyDTO] = Json.format[GeographyDTO]
