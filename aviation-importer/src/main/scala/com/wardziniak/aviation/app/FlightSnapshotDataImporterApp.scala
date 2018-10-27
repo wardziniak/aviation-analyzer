@@ -1,33 +1,31 @@
 package com.wardziniak.aviation.app
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Props}
 import akka.stream.ActorMaterializer
+import com.wardziniak.aviation.importer.api.FlightDownloadAction
 import com.wardziniak.aviation.importer.config.ConfigLoader
-import com.wardziniak.aviation.importer.flights.FlightSnapshotDataImporter
-import play.api.libs.ws.StandaloneWSClient
+import com.wardziniak.aviation.importer.flights.{FlightDataPublisherActor, FlightDownloaderActor}
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
-
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 object FlightSnapshotDataImporterApp extends App {
+
+  import scala.concurrent.ExecutionContext.Implicits.global
+  implicit val system: ActorSystem = ActorSystem("aviation-edge-actor-system")
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
+
   val config = ConfigLoader.loadConfig
 
-  implicit val system: ActorSystem = ActorSystem("aviation-edge-actor-system")
+  val publisher = system
+    .actorOf(Props(FlightDataPublisherActor(kafkaServer = config.kafka.server, topic = config.kafka.mainTopic)), name = "flightPublisher")
+  val downloaderActor =
+    system.actorOf(Props(FlightDownloaderActor(secretKey = config.serverKey, wsClient = StandaloneAhcWSClient())))
 
-  val dataImporter = new FlightSnapshotDataImporter {
-    override def kafkaServer: String = config.kafka.server
-    override implicit val executor: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-    override implicit val materializer: ActorMaterializer = ActorMaterializer()
-    override val wsClient: StandaloneWSClient = StandaloneAhcWSClient()
-  }
-
-  val flightUrl = "http://aviation-edge.com/v2/public/flights?key="
-
-  val results = dataImporter.importData(url = s"$flightUrl${config.serverKey}")(topic = config.kafka.mainTopic)
-
-  Await.result(results, Duration.Inf)
-  dataImporter.close()
-  val terminated = system.terminate()
-  Await.result(terminated, Duration.Inf)
+  val cancellable =
+    system.scheduler.schedule(
+      0 milliseconds,
+      2 minute,
+      downloaderActor,
+      FlightDownloadAction)
 }

@@ -10,14 +10,14 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, Produce
 trait RawDataPublisherActor[KEY, V <: Value]
   extends Actor with LazyLogging {
 
-  val props: Properties = {
+  lazy val props: Properties = {
     val props = new Properties()
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer)
     props.put(ProducerConfig.CLIENT_ID_CONFIG, "clientId")
     props
   }
 
-  val kafkaServer: String
+  val kafkaServer: String = "localhost:9092"
   val topic: String
   val producer: KafkaProducer[KEY, V]
 
@@ -31,9 +31,4 @@ trait RawDataPublisherActor[KEY, V <: Value]
       logger.error(s"Unkown type [$p]")
   }
 
-}
-
-object RawDataPublisherActor {
-  val BusDataPublisherActor = "busPublisher"
-  val TrampDataPublisherActor = "trampPublisher"
 }

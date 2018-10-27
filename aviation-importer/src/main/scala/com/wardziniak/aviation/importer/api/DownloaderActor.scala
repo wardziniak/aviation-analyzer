@@ -46,12 +46,16 @@ trait DownloaderActor[IN <: DTO, OUT <: Value, ActionType <: DownloadAction] ext
   override def receive = {
     case action: ActionType =>
       val url = s"$BaseUrl${action.endpoint}?key=$secretKey${action.queryParameters}"
-      download(url).map(rawRecords =>
+      download(url).map(rawRecords => {
+        logger.error("dupa")
         rawRecords.foreach(location => {
           logger.trace(s"$location")
           publisherActor ! transform(location)
         }
-        ))
+        )
+      })
+    case p =>
+      logger.error(s"Unknown message [$p]")
   }
 }
 
