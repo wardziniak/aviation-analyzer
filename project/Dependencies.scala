@@ -14,7 +14,7 @@ object Dependencies {
       playFakeWsStandalone,
       embeddedKafka, pureConfig) ++ test
     lazy val analyzer: Seq[ModuleID] = Seq(
-      logbackClassic, kafkaStreams, embeddedKafka, pureConfig
+      logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest
     ) ++ test
   }
 
@@ -45,6 +45,7 @@ object Dependencies {
   val kafkaClient: ModuleID = "org.apache.kafka" % "kafka-clients" % Versions.kafka
   val kafkaStreams: ModuleID = "org.apache.kafka" % "kafka-streams" % Versions.kafka
   val kafkaStreamsScala: ModuleID = "org.apache.kafka" %% "kafka-streams-scala" % Versions.kafka
+  val kafkaStreamsTest: ModuleID = "org.apache.kafka" % "kafka-streams-test-utils" % Versions.kafka % Test
 
   // Logging
   lazy val scalaLogging: ModuleID = "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging

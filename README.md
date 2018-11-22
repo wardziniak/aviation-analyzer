@@ -30,3 +30,12 @@ To play with sample data. You have to only register at https://aviation-edge.com
 To access to rest API you can use any rest Client or go to https://aviation-edge.com/get.php, where you can check data through web page.
 
 
+
+
+Parts:
+
+Kafka Streams is used for preprocess data for spark. 
+At spark model will
+
+
+
