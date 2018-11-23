@@ -14,7 +14,7 @@ object Dependencies {
       playFakeWsStandalone,
       embeddedKafka, pureConfig) ++ test
     lazy val analyzer: Seq[ModuleID] = Seq(
-      logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest
+      logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest, json4sJackson
     ) ++ test
   }
 
@@ -28,6 +28,7 @@ object Dependencies {
 
   // Serializer
   lazy val avro4sCore = "com.sksamuel.avro4s" %% "avro4s-core" % Versions.Avro4sCore
+  lazy val json4sJackson = "org.json4s" %% "json4s-jackson" % Versions.Json4sJackson
 
 
 

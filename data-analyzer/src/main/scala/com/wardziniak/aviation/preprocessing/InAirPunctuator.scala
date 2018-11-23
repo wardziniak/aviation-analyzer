@@ -21,7 +21,7 @@ case class InAirPunctuator(
   extends Punctuator
     with LazyLogging {
 
-  val LANDING_TIMEOUT = 900000
+  val LANDING_TIMEOUT = 600000
   val SECONDS_TO_MS = 1000
 
   var inAirStore: KeyValueStore[String, InAirFlightData] = context.getStateStore(inAirFlightsStoreName).asInstanceOf[KeyValueStore[String, InAirFlightData]]
@@ -35,13 +35,15 @@ case class InAirPunctuator(
       .asScala
       .filter(_.value.lastTimeStamp * SECONDS_TO_MS + LANDING_TIMEOUT < timestamp)
       .map(flightData => {
-        logger.info(s"[key=${flightData.key}],[size=${flightData.value.flightInfo.size}],[timestamp=$timestamp],[lastupdate=${flightData.value.lastTimeStamp}]")
         val landedSnapshot = flightData.value.flightInfo.maxBy(_.updated)
+        val duplicatedValues = flightData.value.flightInfo.sortBy(_.updated).distinct
+        logger.debug(s"[key=${flightData.key}],[size=${duplicatedValues.size}],[timestamp=$timestamp],[lastupdate=${flightData.value.lastTimeStamp}]")
         landedStore.put(flightData.key, landedSnapshot)
-        flightData.value.flightInfo.foreach(flightSnapshot => context.forward(flightData.key, flightSnapshot))
+        duplicatedValues.foreach(flightSnapshot => context.forward(flightData.key, flightSnapshot))
         flightData
       }).toList
     flightInAirIterator.close()
+
     toRemove.foreach(sentFlights => inAirStore.delete(sentFlights.key))
   }
 }

@@ -9,7 +9,7 @@ import com.wardziniak.aviation.common.serialization.GenericSerde
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.Topology
-import org.apache.kafka.streams.kstream.{Consumed, Joined, Materialized, Produced}
+import org.apache.kafka.streams.kstream._
 import org.apache.kafka.streams.scala.StreamsBuilder
 import org.apache.kafka.streams.state.{KeyValueStore, StoreBuilder, Stores}
 
@@ -34,21 +34,20 @@ trait PreProcessingTopologyBuilder
 
     val airports = builder.table(AirportsTopic)(Consumed.`with`(Serdes.String(), new GenericSerde[Airport]))
 
-    builder.table(LandedTableTopic, landedMaterialized)(Consumed.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
+    val landedStream = builder.table(LandedTableTopic, landedMaterialized)(Consumed.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
       .toStream
-      .peek((key, value) => logger.info(s"[landed  key=$key, value=$value]"))
+      .peek((key, value) => logger.debug(s"[landed  [$key], [$value]"))
       .map((_, flightSnapshot) => (flightSnapshot.arrival.iata, flightSnapshot))
       .join(airports)((landedSnapshot, airport) => (landedSnapshot, airport))(Joined.`with`(Serdes.String(), new GenericSerde[FlightSnapshot], new GenericSerde[Airport]))
       .mapValues(Helpers.calculateLandingTime _)
       .map((_, flight) => (flight.flightNumber.iata, flight))
-      .to(LandedTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
 
     val inAirAfterLanding = source.transform[String, FlightSnapshot](InAirTransformer(InAirFlightStoreName, LandedFlightStoreName), InAirFlightStoreName, LandedFlightStoreName)
-    val landedTable = builder.table(LandedTopic)(Consumed.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
     inAirAfterLanding
-      .join(landedTable)((f, landedFlight) => f.witLandedTimestamp(landedFlight.landedTimestamp.getOrElse(-1)))(Joined.`with`(Serdes.String(), new GenericSerde[FlightSnapshot], new GenericSerde[FlightSnapshot]))
+      .join(landedStream)((f, landedFlight) => f.witLandedTimestamp(landedFlight.landedTimestamp.getOrElse(-1)), JoinWindows.of(1000))(Joined.`with`(Serdes.String(), new GenericSerde[FlightSnapshot], new GenericSerde[FlightSnapshot]))
+      .peek((key, value) => logger.debug(s"afterJoing: [$key][$value]"))
       .to(InAirWithLandTimeTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
-    errorStream.peek((key, f) => logger.info(s"[key=$key], [value=$f")).to(ErrorTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
+    errorStream.peek((key, f) => logger.debug(s"[key=$key], [value=$f")).to(ErrorTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
 
     builder.build()
   }

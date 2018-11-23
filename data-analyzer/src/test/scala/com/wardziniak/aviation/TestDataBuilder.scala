@@ -1,6 +1,9 @@
 package com.wardziniak.aviation
 
+import java.io.InputStream
+
 import com.wardziniak.aviation.api.model._
+import kafka.utils.Json
 
 object TestDataBuilder {
 
@@ -27,4 +30,28 @@ object TestDataBuilder {
     enRoute =  "enRoute",
     updated = 1233
   )
+
+
+  // 50.037958
+
+
+  val departureFrankfurtAirport = Airport(
+    id = "1",
+    name = "Frankfurt",
+    codeIata = "FRA",
+    codeIcao = "EDDF",
+    latitude = 50.037958,
+    longitude =  8.562126
+  )
+
+  val arrivalNiceAirport = Airport(
+    id = "1",
+    name = "Nice",
+    codeIata = "NCE",
+    codeIcao = "LFMN",
+    latitude = 43.659924,
+    longitude = 7.214584
+  )
+
+
 }

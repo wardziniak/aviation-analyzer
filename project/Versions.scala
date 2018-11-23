@@ -18,6 +18,7 @@ object Versions {
   lazy val embeddedKafka = "2.0.0"
 
   lazy val Avro4sCore = "1.9.0"
+  lazy val Json4sJackson = "3.6.2"
 
   lazy val PureConfig = "0.9.2"
 
