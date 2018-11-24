@@ -1,4 +1,4 @@
-package com.wardziniak.aviation
+package com.wardziniak.aviation.preprocessing.utils
 
 import org.apache.kafka.streams.Topology
 

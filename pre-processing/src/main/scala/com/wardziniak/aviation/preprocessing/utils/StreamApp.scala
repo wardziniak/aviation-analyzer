@@ -1,4 +1,4 @@
-package com.wardziniak.aviation
+package com.wardziniak.aviation.preprocessing.utils
 
 import java.util.Properties
 import java.util.concurrent.TimeUnit

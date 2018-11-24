@@ -1,8 +1,9 @@
-package com.wardziniak.aviation.preprocessing
+package com.wardziniak.aviation.preprocessing.app
 
 import com.typesafe.scalalogging.LazyLogging
-import com.wardziniak.aviation.StreamApp
-import com.wardziniak.aviation.analyzer.kafka.StreamConfigBuilder
+import com.wardziniak.aviation.preprocessing.PreProcessingTopologyBuilder
+import com.wardziniak.aviation.preprocessing.utils.StreamApp
+import com.wardziniak.aviation.preprocessing.utils.kafka.StreamConfigBuilder
 import org.apache.kafka.streams.Topology
 
 

@@ -1,4 +1,4 @@
-package com.wardziniak.aviation.analyzer.kafka
+package com.wardziniak.aviation.preprocessing.utils.kafka
 
 import java.util.Properties
 

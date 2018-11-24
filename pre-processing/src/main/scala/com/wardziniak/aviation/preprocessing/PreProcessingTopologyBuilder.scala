@@ -1,11 +1,11 @@
 package com.wardziniak.aviation.preprocessing
 
 import com.typesafe.scalalogging.LazyLogging
-import com.wardziniak.aviation.TopologyBuilder
-import com.wardziniak.aviation.analyzer.Stores.{InAirFlightStoreName, LandedFlightStoreName}
-import com.wardziniak.aviation.analyzer.Topics._
+import com.wardziniak.aviation.preprocessing.StoresNames.{InAirFlightStoreName, LandedFlightStoreName}
+import com.wardziniak.aviation.preprocessing.TopicsNames._
 import com.wardziniak.aviation.api.model.{Airport, AnalyticFlightSnapshot, FlightSnapshot, InAirFlightData}
 import com.wardziniak.aviation.common.serialization.GenericSerde
+import com.wardziniak.aviation.preprocessing.utils.TopologyBuilder
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.Topology
