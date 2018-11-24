@@ -4,7 +4,7 @@ import com.typesafe.scalalogging.LazyLogging
 import com.wardziniak.aviation.TopologyBuilder
 import com.wardziniak.aviation.analyzer.Stores.{InAirFlightStoreName, LandedFlightStoreName}
 import com.wardziniak.aviation.analyzer.Topics._
-import com.wardziniak.aviation.api.model.{Airport, FlightSnapshot, InAirFlightData}
+import com.wardziniak.aviation.api.model.{Airport, AnalyticFlightSnapshot, FlightSnapshot, InAirFlightData}
 import com.wardziniak.aviation.common.serialization.GenericSerde
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
@@ -45,8 +45,13 @@ trait PreProcessingTopologyBuilder
     val inAirAfterLanding = source.transform[String, FlightSnapshot](InAirTransformer(InAirFlightStoreName, LandedFlightStoreName), InAirFlightStoreName, LandedFlightStoreName)
     inAirAfterLanding
       .join(landedStream)((f, landedFlight) => f.witLandedTimestamp(landedFlight.landedTimestamp.getOrElse(-1)), JoinWindows.of(1000))(Joined.`with`(Serdes.String(), new GenericSerde[FlightSnapshot], new GenericSerde[FlightSnapshot]))
+      .map((_, fs) => (fs.arrival.iata, fs))
+      .join(airports)((fs, airport) => fs.withAirportData(airport))(Joined.`with`(Serdes.String(), new GenericSerde[FlightSnapshot], new GenericSerde[Airport]))
       .peek((key, value) => logger.debug(s"afterJoing: [$key][$value]"))
-      .to(InAirWithLandTimeTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
+      .to(InAirWithLandedDataTopic)(Produced.`with`(Serdes.String(), new GenericSerde[AnalyticFlightSnapshot]))
+      //.to(InAirWithLandedDataTopic)(Produced.`with`(Serdes.String(), new GenericSerde[AnalyticFlightSnapshot]))
+
+
     errorStream.peek((key, f) => logger.debug(s"[key=$key], [value=$f")).to(ErrorTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
 
     builder.build()

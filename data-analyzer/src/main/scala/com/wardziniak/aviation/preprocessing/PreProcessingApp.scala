@@ -8,7 +8,7 @@ import org.apache.kafka.streams.Topology
 
 /**
   * Application pre process data for analytic purpose
-  * In [[com.wardziniak.aviation.analyzer.Topics.InAirWithLandTimeTopic]]
+  * In [[com.wardziniak.aviation.analyzer.Topics.InAirWithLandedDataTopic]]
   * FlightSnapshot records with time to land are saved
   * New approach to calculating landing time for plane
   * If for some LANDING_TIMEOUT there is no new entry for flight

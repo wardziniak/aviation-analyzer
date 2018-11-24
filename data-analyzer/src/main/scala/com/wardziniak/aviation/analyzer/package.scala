@@ -12,7 +12,7 @@ package object analyzer {
     val LandedTableTopic = "landed-table"
     val LandedTopic = "landed"
     val AirportsTopic = "airports" // Should be compacted topic
-    val InAirWithLandTimeTopic = "in-air-with-landed-time"
+    val InAirWithLandedDataTopic = "in-air-with-landed-time"
     val ErrorTopic = "errors"
 
 
