@@ -2,12 +2,13 @@ package com.wardziniak.aviation.preprocessing
 
 import com.typesafe.scalalogging.LazyLogging
 import com.wardziniak.aviation.api.model.{FlightSnapshot, InAirFlightData}
+import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.kstream.Transformer
 import org.apache.kafka.streams.processor.{ProcessorContext, PunctuationType}
 import org.apache.kafka.streams.state.KeyValueStore
 
 case class InAirTransformer(inAirFlightsStoreName: String, landingStoreName: String)
-  extends Transformer[String, FlightSnapshot, (String, FlightSnapshot)]
+  extends Transformer[String, FlightSnapshot, KeyValue[String, FlightSnapshot]]
     with LazyLogging {
 
   val PUNCTUATION_INTERVAL = 60000//3600000
@@ -22,7 +23,7 @@ case class InAirTransformer(inAirFlightsStoreName: String, landingStoreName: Str
     context.schedule(PUNCTUATION_INTERVAL, PunctuationType.WALL_CLOCK_TIME, InAirPunctuator(context, inAirFlightsStoreName, landingStoreName))
   }
 
-  override def transform(icao: String, flightSnapshot: FlightSnapshot): (String, FlightSnapshot) = {
+  override def transform(icao: String, flightSnapshot: FlightSnapshot): KeyValue[String, FlightSnapshot] = {
     Option(inAirStore.get(icao))
       .map(_.addSnapshot(flightSnapshot))
       .orElse(Some(InAirFlightData(flightSnapshot)))

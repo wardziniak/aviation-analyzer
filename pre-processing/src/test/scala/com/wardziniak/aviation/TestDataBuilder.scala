@@ -1,9 +1,6 @@
 package com.wardziniak.aviation
 
-import java.io.InputStream
-
 import com.wardziniak.aviation.api.model._
-import kafka.utils.Json
 
 object TestDataBuilder {
 

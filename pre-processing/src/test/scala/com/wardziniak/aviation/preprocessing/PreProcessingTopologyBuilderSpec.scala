@@ -5,7 +5,7 @@ import java.util.Properties
 
 import com.typesafe.scalalogging.LazyLogging
 import com.wardziniak.aviation.TestDataBuilder._
-import com.wardziniak.aviation.analyzer.Topics._
+import com.wardziniak.aviation.preprocessing.TopicsNames._
 import com.wardziniak.aviation.api.model.{Airport, AnalyticFlightSnapshot, FlightSnapshot}
 import com.wardziniak.aviation.common.serialization.{GenericDeserializer, GenericSerializer}
 import com.wardziniak.aviation.utils.MessageStreamReader

@@ -19,7 +19,10 @@ class FlightSnapshotDataDownloaderSpec(implicit ee: ExecutionEnv)
   implicit val system: ActorSystem = ActorSystem()
   implicit val mat: ActorMaterializer = ActorMaterializer()
 
-  val content: String = Source.fromResource("flights_data.json").mkString
+  val fileName = s"file:///${this.getClass.getResource("/flights_data.json").getPath}"
+  val content: String = Source.fromURL(fileName).mkString
+
+//  val content: String = Source.fromResource("flights_data.json").mkString
   val flightUrl: String = "http://aviation-edge.com/v2/public/flights?key=someKey"
   val wsClient = StandaloneFakeWSClient {
     case GET(url"$flightUrl") => Ok(content)

@@ -9,7 +9,7 @@ object Versions {
     lazy val Analyzer = "0.1"
   }
 
-  lazy val scalaVersion = "2.12.1"
+  lazy val scalaVersion = "2.11.12"
 
   // Test
   lazy val scalaTest = "3.0.5"
@@ -22,7 +22,7 @@ object Versions {
 
   lazy val PureConfig = "0.9.2"
 
-  lazy val kafka = "2.0.0"
+  lazy val kafka = "2.0.1"
 
   lazy val playWsStandalone = "1.1.10"
 

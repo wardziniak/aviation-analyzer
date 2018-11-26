@@ -8,7 +8,7 @@ import com.wardziniak.aviation.common.serialization.GenericSerde
 import com.wardziniak.aviation.preprocessing.utils.TopologyBuilder
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
-import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.{KeyValue, Topology}
 import org.apache.kafka.streams.kstream._
 import org.apache.kafka.streams.scala.StreamsBuilder
 import org.apache.kafka.streams.state.{KeyValueStore, StoreBuilder, Stores}
@@ -42,7 +42,8 @@ trait PreProcessingTopologyBuilder
       .mapValues(Helpers.calculateLandingTime _)
       .map((_, flight) => (flight.flightNumber.iata, flight))
 
-    val inAirAfterLanding = source.transform[String, FlightSnapshot](InAirTransformer(InAirFlightStoreName, LandedFlightStoreName), InAirFlightStoreName, LandedFlightStoreName)
+
+    val inAirAfterLanding = source.transform[String, FlightSnapshot](() => InAirTransformer(InAirFlightStoreName, LandedFlightStoreName), InAirFlightStoreName, LandedFlightStoreName)
     inAirAfterLanding
       .join(landedStream)((f, landedFlight) => f.witLandedTimestamp(landedFlight.landedTimestamp.getOrElse(-1)), JoinWindows.of(1000))(Joined.`with`(Serdes.String(), new GenericSerde[FlightSnapshot], new GenericSerde[FlightSnapshot]))
       .map((_, fs) => (fs.arrival.iata, fs))
