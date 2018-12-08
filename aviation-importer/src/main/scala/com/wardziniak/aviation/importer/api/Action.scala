@@ -9,5 +9,10 @@ trait DownloadAction extends Action {
 
 object FlightDownloadAction extends DownloadAction {
   override def endpoint: String = "flights"
+  // override def queryParameters: String = "&airlineIata=LH"
+}
+
+object AirportDownloadAction extends DownloadAction {
+  override def endpoint: String = "airportDatabase"
 }
 

@@ -1,4 +1,4 @@
-import sbt.{ModuleID, _}
+import sbt.{ExclusionRule, ModuleID, _}
 
 object Dependencies {
 
@@ -14,10 +14,13 @@ object Dependencies {
       playFakeWsStandalone,
       embeddedKafka, pureConfig) ++ test
     lazy val preProcessing: Seq[ModuleID] = Seq(
-      logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest, json4sJackson
+      logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest, json4sJackson, zkClient
     ) //++ test
     lazy val analyzer: Seq[ModuleID] = Seq(
-      logbackClassic, sparkStreaming, sparkStreamingKafka, sparkTest
+      logbackClassic, sparkStreaming, sparkSql.excludeAll(ExclusionRule(organization = "org.json4s")),
+      sparkSqlKafka.excludeAll(ExclusionRule(organization = "org.json4s")),
+      sparkStreamingKafka.excludeAll(ExclusionRule(organization = "org.json4s")), sparkTest.excludeAll(ExclusionRule(organization = "org.json4s")),
+        embeddedKafka.excludeAll(ExclusionRule(organization = "org.json4s"))
     )
   }
 
@@ -53,9 +56,14 @@ object Dependencies {
 
   // Spark
   val sparkStreaming: ModuleID = "org.apache.spark" %% "spark-streaming" % "2.3.0"
+  val sparkSqlKafka = "org.apache.spark" %% "spark-sql-kafka-0-10" % "2.3.0"
   val sparkStreamingKafka: ModuleID =  "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.3.0"
+  val sparkSql: ModuleID = "org.apache.spark" %% "spark-sql" % "2.3.0"
   val sparkTest: ModuleID = "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0" % "test"
 
+  val zkClient: ModuleID = "com.101tec" % "zkclient" % "0.10"
+
+  val jackson: ModuleID = "com.fasterxml.jackson.module" % "jackson-module-scala" % "2.7.4"
 
   // Logging
   lazy val scalaLogging: ModuleID = "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging

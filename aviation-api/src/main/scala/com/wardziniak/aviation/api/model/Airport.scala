@@ -14,4 +14,4 @@ case class Airport(
   gmt: String = "",
   nameCountry: String = "",
   codeIso2Country: String = "",
-  codeIataCity: String = "")
+  codeIataCity: String = "") extends Value

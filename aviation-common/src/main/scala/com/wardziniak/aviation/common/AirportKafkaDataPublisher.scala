@@ -2,14 +2,14 @@ package com.wardziniak.aviation.common
 
 import java.util.Properties
 
-import com.wardziniak.aviation.api.model.FlightSnapshot
+import com.wardziniak.aviation.api.model.Airport
 import com.wardziniak.aviation.common.serialization.GenericSerializer
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig}
 import org.apache.kafka.common.serialization.StringSerializer
 
-trait FlightSnapshotKafkaDataPublisher extends KafkaDataPublisher[String, FlightSnapshot]
+trait AirportKafkaDataPublisher extends KafkaDataPublisher[String, Airport]
 
-trait DefaultFlightSnapshotKafkaDataPublisher extends FlightSnapshotKafkaDataPublisher {
+trait DefaultAirportKafkaDataPublisher extends AirportKafkaDataPublisher {
 
   def kafkaServer: String = KafkaDataPublisher.KafkaDefaultServer
 
@@ -20,7 +20,7 @@ trait DefaultFlightSnapshotKafkaDataPublisher extends FlightSnapshotKafkaDataPub
     props
   }
 
-  override val keyExtractor: FlightSnapshot => String = flight => flight.flightNumber.iata
-  override val producer: KafkaProducer[String, FlightSnapshot] =
-    new KafkaProducer[String, FlightSnapshot](props, new StringSerializer(), new GenericSerializer[FlightSnapshot])
+  override val keyExtractor: Airport => String = airport => airport.codeIata
+  override val producer: KafkaProducer[String, Airport] =
+    new KafkaProducer[String, Airport](props, new StringSerializer(), new GenericSerializer[Airport])
 }

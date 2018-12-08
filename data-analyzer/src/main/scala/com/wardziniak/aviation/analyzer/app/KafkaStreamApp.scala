@@ -1,18 +1,19 @@
 package com.wardziniak.aviation.analyzer.app
 
+import com.wardziniak.aviation.analyzer.app.SampleApp.ssc
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.dstream.DStream
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-object SampleApp extends App {
+object KafkaStreamApp extends App {
+
+  val conf = new SparkConf().setMaster("local[2]").setAppName("NetworkWordCount")
+  val ssc = new StreamingContext(conf, Seconds(1))
 
 
-  private val master = "local[2]"
-  val sparkConf = new SparkConf().setAppName("SampleApp").setMaster(master)
-  val ssc = new StreamingContext(sparkConf, Seconds(2))
+  ssc.sparkContext
 
   val kafkaParams = Map[String, Object](
     ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> "localhost:9092",
@@ -24,11 +25,11 @@ object SampleApp extends App {
   val messages = KafkaUtils.createDirectStream[String, String](
     ssc,
     LocationStrategies.PreferConsistent,
-    ConsumerStrategies.Subscribe[String, String](Set("test-stream"), kafkaParams))
+    ConsumerStrategies.Subscribe[String, String](Set("topicA"), kafkaParams))
 
   val lines = messages.map(_.value)
   val words = lines.flatMap(_.split(" "))
-  val wordCounts: DStream[(String, Long)] = words.map(x => (x, 1L)).reduceByKey(_ + _)
+  val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
   wordCounts.print()
 
   ssc.start()
