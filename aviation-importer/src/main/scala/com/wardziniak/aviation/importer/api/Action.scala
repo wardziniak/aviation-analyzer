@@ -14,5 +14,7 @@ object FlightDownloadAction extends DownloadAction {
 
 object AirportDownloadAction extends DownloadAction {
   override def endpoint: String = "airportDatabase"
+
+  override def queryParameters: String = "&codeIso2Country=DE"
 }
 

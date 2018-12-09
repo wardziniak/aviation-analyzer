@@ -12,7 +12,7 @@ case class AirportDTO(
   airportId: String,
   nameAirport: String,
   codeIataAirport: String,
-  codeIcaoAirport: String,
+  codeIcaoAirport: Option[String],
   nameTranslations: String,
   latitudeAirport: String,
   longitudeAirport: String,
@@ -30,14 +30,15 @@ object AirportDTO {
   implicit val AirportFormat: OFormat[AirportDTO] = Json.format[AirportDTO]
 
   implicit val readableAsAirport: BodyReadable[List[AirportDTO]] = BodyReadable { response =>
-    Json.fromJson[List[AirportDTO]](Json.parse(response.bodyAsBytes.toArray)).get
+    val d = Json.fromJson[List[AirportDTO]](Json.parse(response.bodyAsBytes.toArray))
+    d.get
   }
 
   implicit def asAirport(dto: AirportDTO): Airport = Airport(
     id = dto.airportId,
     name = dto.nameAirport,
     codeIata = dto.codeIataAirport,
-    codeIcao = dto.codeIcaoAirport,
+    codeIcao = dto.codeIcaoAirport.getOrElse(""),
     latitude = dto.latitudeAirport.toDouble,
     longitude = dto.longitudeAirport.toDouble,
     nameCountry = dto.nameCountry,

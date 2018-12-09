@@ -12,9 +12,11 @@ case class AirportDownloaderActor (secretKey: String, wsClient: StandaloneWSClie
   extends DownloaderActor[AirportDTO, Airport, AirportDownloadAction.type] {
 
   override val publisherActor: ActorSelection =
-    context.system.actorSelection(s"/user/flightPublisher")
+    context.system.actorSelection(s"/user/airportPublisher")
   import AirportDTO.readableAsAirport
   override implicit val readableAsExternalFormat: BodyReadable[List[AirportDTO]] = readableAsAirport
 
   override def transform(dto: AirportDTO): Value = AirportDTO.asAirport(dto)
+
+  override def test(in: AirportDTO): Boolean = in.codeIata.nonEmpty
 }

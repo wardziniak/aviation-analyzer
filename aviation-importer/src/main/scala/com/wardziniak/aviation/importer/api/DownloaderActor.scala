@@ -38,6 +38,7 @@ trait DownloaderActor[IN <: DTO, OUT <: Value, ActionType <: DownloadAction] ext
 
   def transform(dto: IN): Value
 
+  def test(in: IN): Boolean = true
 
   def download(url: String): Future[List[IN]] = {
     wsClient.url(url).get.map(response => response.body[List[IN]])
@@ -46,9 +47,10 @@ trait DownloaderActor[IN <: DTO, OUT <: Value, ActionType <: DownloadAction] ext
   override def receive = {
     case action: ActionType =>
       val url = s"$BaseUrl${action.endpoint}?key=$secretKey${action.queryParameters}"
+      logger.error(s"$url")
       download(url).map(rawRecords => {
         logger.error("dupa")
-        rawRecords.foreach(location => {
+        rawRecords.filter(test).foreach(location => {
           logger.trace(s"$location")
           publisherActor ! transform(location)
         }
