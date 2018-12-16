@@ -1,9 +1,6 @@
 package com.wardziniak.aviation.preprocessing.app
 
-import com.sksamuel.avro4s.SchemaFor
 import com.typesafe.scalalogging.LazyLogging
-import com.wardziniak.aviation.api.model.InAirFlightData
-import com.wardziniak.aviation.common.serialization.{GenericDeserializer, GenericSerde}
 import com.wardziniak.aviation.preprocessing.PreProcessingTopologyBuilder
 import com.wardziniak.aviation.preprocessing.utils.StreamApp
 import com.wardziniak.aviation.preprocessing.utils.kafka.StreamConfigBuilder

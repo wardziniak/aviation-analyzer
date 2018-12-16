@@ -14,17 +14,17 @@ object TestApp extends App {
   val inAirFlightData = "{ \"takeOfTimestamp\": 1542578159, \"lastTimeStamp\": 1542584244, \"flightInfo\": [ { \"localization\": { \"latitude\": 46.5731, \"longitude\": 19.3014, \"altitude\": 11887.2, \"direction\": 115.0 }, \"speed\": { \"horizontal\": 844.512, \"isGround\": false, \"vertical\": 0.0 }, \"departure\": { \"iata\": \"MUC\", \"icao\": \"EDDM\" }, \"arrival\": { \"iata\": \"OTP\", \"icao\": \"LROP\" }, \"aircraft\": { \"regNumber\": \"S5AAX\", \"icao\": \"A319\", \"icao24\": \"506C2F\", \"iata\": \"A319\" }, \"flightNumber\": { \"iata\": \"LH1656\", \"icao\": \"GEC1656\", \"number\": \"1656\" }, \"airlineCode\": { \"iata\": \"LH\", \"icao\": \"GEC\" }, \"enRoute\": \"en-route\", \"updated\": 1542580819 } ] }"
 
   import com.wardziniak.aviation.api.model.InAirFlightData
-  val deserializer = new GenericDeserializer[InAirFlightData]()
+  //val deserializer = new GenericDeserializer[InAirFlightData]()
 
   //val aa = deserializer.deserialize("", inAirFlightData.getBytes)
 
-
-  val in = new ByteArrayInputStream(inAirFlightData.getBytes)
-  val input = AvroInputStream.json[InAirFlightData](in)
-  //input.iterator.toList.head
-  val dd = input.singleEntity
-  //input.singleEntity.get
-  dd.get
+//
+//  val in = new ByteArrayInputStream(inAirFlightData.getBytes)
+//  val input = AvroInputStream.json[InAirFlightData](in)
+//  //input.iterator.toList.head
+//  val dd = input.singleEntity
+//  //input.singleEntity.get
+//  dd.get
 
 
 }
