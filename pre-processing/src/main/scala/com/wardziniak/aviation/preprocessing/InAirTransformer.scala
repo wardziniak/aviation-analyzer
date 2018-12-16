@@ -23,11 +23,11 @@ case class InAirTransformer(inAirFlightsStoreName: String, landingStoreName: Str
     context.schedule(PUNCTUATION_INTERVAL, PunctuationType.WALL_CLOCK_TIME, InAirPunctuator(context, inAirFlightsStoreName, landingStoreName))
   }
 
-  override def transform(icao: String, flightSnapshot: FlightSnapshot): KeyValue[String, FlightSnapshot] = {
-    Option(inAirStore.get(icao))
+  override def transform(iata: String, flightSnapshot: FlightSnapshot): KeyValue[String, FlightSnapshot] = {
+    Option(inAirStore.get(iata))
       .map(_.addSnapshot(flightSnapshot))
       .orElse(Some(InAirFlightData(flightSnapshot)))
-      .foreach(inAirStore.put(icao, _))
+      .foreach(inAirStore.put(iata, _))
     null
   }
 

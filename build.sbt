@@ -6,6 +6,7 @@ lazy val `aviation-api` = project.
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Api).
   settings(libraryDependencies ++= Dependencies.Aviation.api)
+  //settings(crossScalaVersions := Seq("2.12.2"))
 
 lazy val `aviation-common` = project.
   dependsOn(`aviation-api`).
@@ -20,7 +21,8 @@ lazy val `aviation-importer` = project.
   settings(description := "Aviation data importer").
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Importer).
-  settings(libraryDependencies ++= Dependencies.Aviation.importer)
+  settings(libraryDependencies ++= Dependencies.Aviation.importer).
+  settings(scalaVersion := Versions.scalaVersion)
 
 lazy val `pre-processing` = project.
   dependsOn(`aviation-api`).
@@ -28,7 +30,8 @@ lazy val `pre-processing` = project.
   settings(description := "Aviation data Analyzer").
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Analyzer).
-  settings(libraryDependencies ++= Dependencies.Aviation.preProcessing)
+  settings(libraryDependencies ++= Dependencies.Aviation.preProcessing).
+  settings(scalaVersion := Versions.scalaVersion)
 
 lazy val `data-analyzer` = project.
   dependsOn(`aviation-api`).
@@ -36,4 +39,5 @@ lazy val `data-analyzer` = project.
   settings(description := "Aviation data Analyzer").
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Analyzer).
-  settings(libraryDependencies ++= Dependencies.Aviation.analyzer)
+  settings(libraryDependencies ++= Dependencies.Aviation.analyzer).
+  settings(scalaVersion := Versions.scalaVersion)

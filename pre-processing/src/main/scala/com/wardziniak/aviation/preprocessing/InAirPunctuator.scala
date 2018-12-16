@@ -40,6 +40,7 @@ case class InAirPunctuator(
         logger.debug(s"[key=${flightData.key}],[size=${duplicatedValues.size}],[timestamp=$timestamp],[lastupdate=${flightData.value.lastTimeStamp}]")
         landedStore.put(flightData.key, landedSnapshot)
         duplicatedValues.foreach(flightSnapshot => context.forward(flightData.key, flightSnapshot))
+        context.commit()
         flightData
       }).toList
     flightInAirIterator.close()

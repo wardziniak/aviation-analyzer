@@ -1,4 +1,5 @@
-import sbt.Keys.{organization, scalaVersion, scalacOptions}
+import sbt.Keys.{organization, scalaVersion, scalacOptions, crossPaths}
+
 
 object Common {
 
@@ -9,6 +10,7 @@ object Common {
   lazy val Settings = Seq(
     organization                 := "com.wardziniak.aviation",
     scalaVersion                 := Versions.scalaVersion,
+    crossPaths := false,
     scalacOptions +=            "-Xexperimental"
   )
 

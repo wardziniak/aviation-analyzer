@@ -9,9 +9,11 @@ package object preprocessing {
 
   object TopicsNames {
     val RawInputTopic = "aviation-in"
+    val IntermediateManTopic = "intermediate-in-air-with-landed-time"
+    val IntermediateLandedTableTopic = "intermediate-landed-table"
     val LandedTableTopic = "landed-table"
     val LandedTopic = "landed"
-    val AirportsTopic = "airports" // Should be compacted topic
+    val AirportsTopic = "airport" // Should be compacted topic
     val InAirWithLandedDataTopic = "in-air-with-landed-time"
     val ErrorTopic = "errors"
 

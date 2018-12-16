@@ -68,4 +68,6 @@ object Dependencies {
   // Logging
   lazy val scalaLogging: ModuleID = "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging
   lazy val logbackClassic: ModuleID = "ch.qos.logback" % "logback-classic" % Versions.logbackClassic
+
+  lazy val dispatch: ModuleID = "net.databinder" %% "dispatch" % "0.8.0"
 }
