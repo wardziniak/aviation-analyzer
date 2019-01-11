@@ -23,14 +23,9 @@ case class FlightSnapshot(
   flightNumber: FlightNumber,
   airlineCode: AirlineCode,
   enRoute: String,
-  updated: Long,
-  landedTimestamp: Option[Long] = None) extends Value {
+  updated: Long) extends Value {
 
   def withLandingData(arrivalAirport: Airport, landedTimestamp: Long): AnalyticFlightSnapshot = {
-    ???
-  }
-
-  def withAirportData(arrivalAirport: Airport): AnalyticFlightSnapshot = {
     AnalyticFlightSnapshot(
       localization = this.localization,
       speed = this.speed,
@@ -41,12 +36,28 @@ case class FlightSnapshot(
       airlineCode = this.airlineCode,
       enRoute = this.enRoute,
       updated = this.updated,
-      landedTimestamp = this.landedTimestamp,
+      landedTimestamp = landedTimestamp,
       arrivalAirport = arrivalAirport
     )
   }
 
-  def witLandedTimestamp(landedTimestamp: Long): FlightSnapshot = this.copy(landedTimestamp = Some(landedTimestamp))
+//  def withAirportData(arrivalAirport: Airport): AnalyticFlightSnapshot = {
+//    AnalyticFlightSnapshot(
+//      localization = this.localization,
+//      speed = this.speed,
+//      departure = this.departure,
+//      arrival = this.arrival,
+//      aircraft = this.aircraft,
+//      flightNumber = this.flightNumber,
+//      airlineCode = this.airlineCode,
+//      enRoute = this.enRoute,
+//      updated = this.updated,
+//      landedTimestamp = this.landedTimestamp.get,
+//      arrivalAirport = arrivalAirport
+//    )
+//  }
+
+//  def witLandedTimestamp(landedTimestamp: Long): FlightSnapshot = this.copy(landedTimestamp = Some(landedTimestamp))
 }
 
 case class AnalyticFlightSnapshot(
@@ -59,7 +70,7 @@ case class AnalyticFlightSnapshot(
   airlineCode: AirlineCode,
   enRoute: String,
   updated: Long,
-  landedTimestamp: Option[Long] = None,
+  landedTimestamp: Long,
   arrivalAirport: Airport
 ) extends Value {
 

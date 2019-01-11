@@ -5,6 +5,7 @@ package object preprocessing {
   object StoresNames {
     val InAirFlightStoreName: String = "flights-in-air-store4"
     val LandedFlightStoreName: String = "landed-flight-store4"
+    val AirportsStoreName: String = "airports-store"
   }
 
   object TopicsNames {

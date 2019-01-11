@@ -88,7 +88,7 @@ class PreProcessingTopologyBuilderSpec
       flightsWithLandingTime.size must beEqualTo(5)
       val landingTimes = flightsWithLandingTime
         .map(_.value())
-        .flatMap(_.landedTimestamp)
+        .map(_.landedTimestamp)
       landingTimes.size must beEqualTo(5)
       landingTimes must eachOf(1542664182L)
       flightsWithLandingTime.map(_.value().arrivalAirport) must eachOf(arrivalNiceAirport)
