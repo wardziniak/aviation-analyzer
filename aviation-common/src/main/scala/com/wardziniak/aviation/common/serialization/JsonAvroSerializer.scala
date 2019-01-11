@@ -10,12 +10,17 @@ object JsonAvroSerializer {
     val output = AvroOutputStream.json[T](baos)
     output.write(value)
     output.close()
-    baos.toByteArray
+    if (value != null) {
+      output.write(value)
+      output.close()
+      baos.toByteArray
+    } else
+      Array.emptyByteArray
   }
 
-  def deserialize[T: SchemaFor: FromRecord](bytes: Array[Byte]): T = {
+  def deserialize[T >: Null: SchemaFor: FromRecord](bytes: Array[Byte]): T = {
     val in = new ByteArrayInputStream(bytes)
     val input = AvroInputStream.json[T](in)
-    input.singleEntity.get
+    input.singleEntity.getOrElse(null)
   }
 }

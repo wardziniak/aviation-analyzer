@@ -46,24 +46,7 @@ case class FlightSnapshot(
     )
   }
 
-//  implicit def asAnalyticFlightSnapshot(flightSnapshot: FlightSnapshot): AnalyticFlightSnapshot = {
-//    AnalyticFlightSnapshot(
-//      localization = flightSnapshot.localization,
-//      speed = flightSnapshot.speed,
-//      departure = flightSnapshot.departure,
-//      arrival = flightSnapshot.arrival,
-//      aircraft = flightSnapshot.aircraft,
-//      flightNumber = flightSnapshot.flightNumber,
-//      airlineCode = flightSnapshot.airlineCode,
-//      enRoute = flightSnapshot.enRoute,
-//      updated = flightSnapshot.updated)
-//  }
-
   def witLandedTimestamp(landedTimestamp: Long): FlightSnapshot = this.copy(landedTimestamp = Some(landedTimestamp))
-
-//  def prepareAnalyticFlightSnapshot(landedTimestamp: Long, latitude: Double, longitude: Double): AnalyticFlightSnapshot = {
-//    this.withLandedTime(landedTimestamp).withAirportGeoLocation(latitude, longitude)
-//  }
 }
 
 case class AnalyticFlightSnapshot(
@@ -80,9 +63,6 @@ case class AnalyticFlightSnapshot(
   arrivalAirport: Airport
 ) extends Value {
 
-//  def withLandedTime(landedTimestamp: Long): AnalyticFlightSnapshot = {
-//    this.copy(landedTimestamp = Some(landedTimestamp), timeToTarget = Some(landedTimestamp - updated))
-//  }
 
   def withAirportGeoLocation(latitude: Double, longitude: Double): AnalyticFlightSnapshot = {
     this

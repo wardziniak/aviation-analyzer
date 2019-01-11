@@ -5,7 +5,7 @@ import java.util
 import com.sksamuel.avro4s.{ FromRecord, SchemaFor }
 import org.apache.kafka.common.serialization.Deserializer
 
-case class GenericDeserializer[T: SchemaFor: FromRecord]() extends Deserializer[T] {
+case class GenericDeserializer[T >: Null: SchemaFor: FromRecord]() extends Deserializer[T] {
 
   override def configure(configs: util.Map[String, _], isKey: Boolean) = {}
 

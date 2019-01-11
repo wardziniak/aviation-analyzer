@@ -9,7 +9,7 @@ object Versions {
     lazy val Analyzer = "0.1"
   }
 
-  lazy val scalaVersion = "2.11.12"
+  lazy val scalaVersion = "2.12.8"// "2.11.12"
 
   // Test
   lazy val scalaTest = "3.0.5"
@@ -28,4 +28,5 @@ object Versions {
 
   lazy val logbackClassic = "1.2.3"
   lazy val scalaLogging = "3.9.0"
+  lazy val Spark = "2.4.0"
 }

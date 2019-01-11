@@ -31,6 +31,9 @@ object PocStructureStreamKafkaApp extends App {
     .selectExpr("CAST(value AS STRING)")
   results.printSchema()
 
+
+
+
   val sQuery: StreamingQuery = results.writeStream.trigger(Trigger.ProcessingTime("5 second"))
     .option("checkpointLocation", "/tmp/checkpoint/")
     .option("kafka.bootstrap.servers", "localhost:9092")

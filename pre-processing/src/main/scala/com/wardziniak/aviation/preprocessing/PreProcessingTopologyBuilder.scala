@@ -45,7 +45,7 @@ trait PreProcessingTopologyBuilder
 
     //airports.toStream.to("some_results")(Produced.`with`(Serdes.String(), new GenericSerde[Airport]))
 
-    val inAirAfterLanding = source.transform[String, FlightSnapshot](() => InAirTransformer(InAirFlightStoreName, LandedFlightStoreName), InAirFlightStoreName, LandedFlightStoreName)
+    source.transform[String, FlightSnapshot](() => InAirTransformer(InAirFlightStoreName, LandedFlightStoreName), InAirFlightStoreName, LandedFlightStoreName)
         .peek((key, value) => logger.info(s"inAirAfterLanding::start:[$key], [$value]"))
       .join(landedStream)((f, landedFlight) => f.witLandedTimestamp(landedFlight.landedTimestamp.getOrElse(-1)),JoinWindows.of(60000))(Joined.`with`(Serdes.String(), new GenericSerde[FlightSnapshot], new GenericSerde[FlightSnapshot]))
       .map((_, fs) => (fs.arrival.iata, fs))

@@ -5,7 +5,7 @@ import java.util
 import com.sksamuel.avro4s.{ FromRecord, SchemaFor, ToRecord }
 import org.apache.kafka.common.serialization.{ Serde, Serializer }
 
-case class GenericSerde[T: SchemaFor: ToRecord: FromRecord]() extends Serde[T] {
+case class GenericSerde[T >: Null: SchemaFor: ToRecord: FromRecord]() extends Serde[T] {
 
   override def deserializer(): GenericDeserializer[T] = {
     GenericDeserializer[T]()

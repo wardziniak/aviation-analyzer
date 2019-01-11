@@ -17,11 +17,15 @@ object Dependencies {
       logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest, json4sJackson, zkClient
     ) //++ test
     lazy val analyzer: Seq[ModuleID] = Seq(
+      postgresqlJdbcDriver,
       logbackClassic, sparkStreaming, sparkSql.excludeAll(ExclusionRule(organization = "org.json4s")),
       sparkSqlKafka.excludeAll(ExclusionRule(organization = "org.json4s")),
-      sparkStreamingKafka.excludeAll(ExclusionRule(organization = "org.json4s")), sparkTest.excludeAll(ExclusionRule(organization = "org.json4s")),
+      sparkStreamingKafka.excludeAll(ExclusionRule(organization = "org.json4s")),
+      sparkMlLib.excludeAll(ExclusionRule(organization = "org.json4s")),
+      //sparkTest.excludeAll(ExclusionRule(organization = "org.json4s")),
         embeddedKafka.excludeAll(ExclusionRule(organization = "org.json4s"))
     )
+    lazy val testProject: Seq[ModuleID] = Seq("org.apache.kafka" % "kafka-clients" % "0.9.0.1")
   }
 
 
@@ -55,10 +59,11 @@ object Dependencies {
   val kafkaStreamsTest: ModuleID = "org.apache.kafka" % "kafka-streams-test-utils" % Versions.kafka % Test
 
   // Spark
-  val sparkStreaming: ModuleID = "org.apache.spark" %% "spark-streaming" % "2.3.0"
-  val sparkSqlKafka = "org.apache.spark" %% "spark-sql-kafka-0-10" % "2.3.0"
-  val sparkStreamingKafka: ModuleID =  "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.3.0"
-  val sparkSql: ModuleID = "org.apache.spark" %% "spark-sql" % "2.3.0"
+  val sparkStreaming: ModuleID = "org.apache.spark" %% "spark-streaming" % Versions.Spark
+  val sparkSqlKafka = "org.apache.spark" %% "spark-sql-kafka-0-10" % Versions.Spark
+  val sparkStreamingKafka: ModuleID =  "org.apache.spark" %% "spark-streaming-kafka-0-10" % Versions.Spark
+  val sparkSql: ModuleID = "org.apache.spark" %% "spark-sql" % Versions.Spark
+  val sparkMlLib: ModuleID = "org.apache.spark" %% "spark-mllib" % Versions.Spark
   val sparkTest: ModuleID = "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0" % "test"
 
   val zkClient: ModuleID = "com.101tec" % "zkclient" % "0.10"
@@ -70,4 +75,6 @@ object Dependencies {
   lazy val logbackClassic: ModuleID = "ch.qos.logback" % "logback-classic" % Versions.logbackClassic
 
   lazy val dispatch: ModuleID = "net.databinder" %% "dispatch" % "0.8.0"
+
+  lazy val postgresqlJdbcDriver = "org.postgresql" % "postgresql" % "42.1.1"
 }

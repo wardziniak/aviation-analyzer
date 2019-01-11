@@ -10,7 +10,6 @@ object Common {
   lazy val Settings = Seq(
     organization                 := "com.wardziniak.aviation",
     scalaVersion                 := Versions.scalaVersion,
-    crossPaths := false,
     scalacOptions +=            "-Xexperimental"
   )
 
