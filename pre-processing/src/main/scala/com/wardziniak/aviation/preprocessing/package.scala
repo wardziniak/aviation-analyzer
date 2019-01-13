@@ -24,4 +24,9 @@ package object preprocessing {
     val TempTopic = "temp1"
   }
 
+  val LANDING_TIMEOUT: Long = 20 * 60 * 1000 // 20 minutes
+  val LOST_TIMEOUT: Long = 40 * 60 * 60 * 1000  // 40 minutes
+  val MINIMAL_LANDING_ALTITUDE = 6000
+  val SECONDS_TO_MS = 1000
+
 }

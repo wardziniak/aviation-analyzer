@@ -22,31 +22,49 @@ case class InAirPunctuator(
   extends Punctuator
     with LazyLogging {
 
-  val LANDING_TIMEOUT = 600000
+
+  logger.info(s"Init::InAirPunctuator")
+
+  val LANDING_TIMEOUT = 20 * 60 * 1000
+  val MINIMAL_LANDING_ALTITUDE = 6000
   val SECONDS_TO_MS = 1000
 
   val airportStore: KeyValueStore[String, Airport] = context.getStateStore(airportStoreName).asInstanceOf[KeyValueStore[String, Airport]]
   var inAirStore: KeyValueStore[String, InAirFlightData] = context.getStateStore(inAirFlightsStoreName).asInstanceOf[KeyValueStore[String, InAirFlightData]]
 
+  // Jesli samolot jest "wysoko", to znaczy,
+  // że nie mógł jeszcze wyladować, więc chociaż zniknął na chwilę, to nic nie robimy.
+  // Druga wartość "długości" nie widzenia snapshotu samolotu, po którym uznajemy, że "zaginął" i nie sledzimy go
+
   override def punctuate(timestamp: Long): Unit = {
     logger.info(s"running punctuate with timestamp = $timestamp")
     import collection.JavaConverters._
     val flightInAirIterator: KeyValueIterator[String, InAirFlightData] = inAirStore.all()
-    val toRemove: Seq[KeyValue[String, InAirFlightData]] = flightInAirIterator
-      .asScala
-      .filter(_.value.lastTimeStamp * SECONDS_TO_MS + LANDING_TIMEOUT < timestamp)
+
+    val inAirPlanes = flightInAirIterator.asScala.toList
+    val landedAirplanes = inAirPlanes.filter(inAirFlightData => Helpers.isAirplaneLand(inAirFlightData.value, timestamp))
       .map(flightData => {
         val landedSnapshot = flightData.value.flightInfo.maxBy(_.updated)
         val destinationAirport = airportStore.get(landedSnapshot.arrival.iata)
         val landedTimestamp = Helpers.calculateLandingTime(landedSnapshot, destinationAirport)
         val duplicatedValues = flightData.value.flightInfo.sortBy(_.updated).distinct
-        duplicatedValues.map(flightSnapshot => flightSnapshot.withLandingData(destinationAirport, landedTimestamp))
-            .foreach(analyticSnapshot => context.forward(analyticSnapshot.flightNumber.iata, analyticSnapshot))
-        logger.debug(s"[key=${flightData.key}],[size=${duplicatedValues.size}],[timestamp=$timestamp],[lastupdate=${flightData.value.lastTimeStamp}]")
+
+        Option(destinationAirport).foreach(destAirport =>
+          duplicatedValues.map(flightSnapshot => flightSnapshot.withLandingData(destAirport, landedTimestamp))
+            .foreach(analyticSnapshot => {
+              logger.info(s"forward: ${analyticSnapshot.flightNumber.iata}, $analyticSnapshot")
+              context.forward(analyticSnapshot.flightNumber.iata, analyticSnapshot)
+            }
+            )
+        )
         flightData
-      }).toList
+      })
+    val lostAirplanes = inAirPlanes.filter(inAirFlightData => Helpers.isAirplaneLost(inAirFlightData.value, timestamp))
+
     flightInAirIterator.close()
 
-    toRemove.foreach(sentFlights => inAirStore.delete(sentFlights.key))
+    landedAirplanes.foreach(landedAirplane => inAirStore.delete(landedAirplane.key))
+    lostAirplanes.foreach(lostAirplane => logger.error(s"Lost following airplane [$lostAirplane]"))
+    lostAirplanes.foreach(lostAirplane => inAirStore.delete(lostAirplane.key))
   }
 }

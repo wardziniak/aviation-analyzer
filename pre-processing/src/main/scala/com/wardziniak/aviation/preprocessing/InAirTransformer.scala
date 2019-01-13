@@ -1,7 +1,7 @@
 package com.wardziniak.aviation.preprocessing
 
 import com.typesafe.scalalogging.LazyLogging
-import com.wardziniak.aviation.api.model.{AnalyticFlightSnapshot, FlightSnapshot, InAirFlightData}
+import com.wardziniak.aviation.api.model.{Airport, AnalyticFlightSnapshot, FlightSnapshot, InAirFlightData}
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.kstream.Transformer
 import org.apache.kafka.streams.processor.{ProcessorContext, PunctuationType}
@@ -11,15 +11,17 @@ case class InAirTransformer(inAirFlightsStoreName: String, airportStoreName: Str
   extends Transformer[String, FlightSnapshot, KeyValue[String, AnalyticFlightSnapshot]]
     with LazyLogging {
 
-  val PUNCTUATION_INTERVAL = 60000//3600000
+  val PUNCTUATION_INTERVAL = 6 * 60 * 1000// every 6 minutes
 
   var inAirStore: KeyValueStore[String, InAirFlightData] = _
+  var airportStore: KeyValueStore[String, Airport] = _
 
   var state: KeyValueStore[String, InAirFlightData] = _
 
   override def init(context: ProcessorContext): Unit = {
     logger.info(s"Init InAirTransformer")
     inAirStore = context.getStateStore(inAirFlightsStoreName).asInstanceOf[KeyValueStore[String, InAirFlightData]]
+    airportStore = context.getStateStore(airportStoreName).asInstanceOf[KeyValueStore[String, Airport]]
     context.schedule(
       PUNCTUATION_INTERVAL,
       PunctuationType.WALL_CLOCK_TIME,
@@ -28,11 +30,20 @@ case class InAirTransformer(inAirFlightsStoreName: String, airportStoreName: Str
   }
 
   override def transform(iata: String, flightSnapshot: FlightSnapshot): KeyValue[String, AnalyticFlightSnapshot] = {
-    Option(inAirStore.get(iata))
-      .map(_.addSnapshot(flightSnapshot))
-      .orElse(Some(InAirFlightData(flightSnapshot)))
-      .foreach(inAirStore.put(iata, _))
+    if (airportStore.get(flightSnapshot.departure.iata) != null && airportStore.get(flightSnapshot.arrival.iata) != null) {
+      Option(inAirStore.get(iata))
+        .map(_.addSnapshot(flightSnapshot))
+        .orElse(Some(InAirFlightData(flightSnapshot)))
+        .foreach(inAirStore.put(iata, _))
+    }
     null
+
+
+//    Option(inAirStore.get(iata))
+//      .map(_.addSnapshot(flightSnapshot))
+//      .orElse(Some(InAirFlightData(flightSnapshot)))
+//      .foreach(inAirStore.put(iata, _))
+//    null
   }
 
   override def close(): Unit = {

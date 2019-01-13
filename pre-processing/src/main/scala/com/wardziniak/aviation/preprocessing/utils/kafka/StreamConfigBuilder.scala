@@ -11,7 +11,7 @@ case class StreamConfigBuilder(
   bootstrapServer: String = "localhost:9092",
   defaultKeySerde: AnyRef = Serdes.String().getClass,
   defaultValueSerde: AnyRef = Serdes.String().getClass,
-  autoOffsetReset: String = "latest") {
+  autoOffsetReset: String = "earliest") {
 
   def withApplicationId(applicationId: String): StreamConfigBuilder = {
     this.copy(applicationId = applicationId)

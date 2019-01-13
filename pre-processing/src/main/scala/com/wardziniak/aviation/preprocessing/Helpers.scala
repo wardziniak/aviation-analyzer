@@ -1,8 +1,10 @@
 package com.wardziniak.aviation.preprocessing
 
-import com.wardziniak.aviation.api.model.{Airport, FlightSnapshot}
+import com.wardziniak.aviation.api.model.{Airport, FlightSnapshot, InAirFlightData}
 
 object Helpers {
+
+  val EuropeTimezone = "Europe"
 
   // TODO implement way of calculating landing time based on distance, lastTimestamp, etc
   def calculateLandingTime(flightSnapshot: FlightSnapshot, airport: Airport): Long = {
@@ -17,5 +19,18 @@ object Helpers {
   }
 
   def allRecords: (String, FlightSnapshot) => Boolean = (_, _) => true
+
+  def isEuropeAirport: (String, Airport) => Boolean = (_, airport) => airport.timezone.contains(EuropeTimezone)
+
+  def isAirplaneLand(inAirFlightData: InAirFlightData, currentTimestamp: Long): Boolean = {
+    val lastSnapshot = inAirFlightData.flightInfo.maxBy(_.updated)
+    lastSnapshot.updated * SECONDS_TO_MS + LANDING_TIMEOUT < currentTimestamp &&
+      lastSnapshot.localization.altitude < MINIMAL_LANDING_ALTITUDE
+  }
+
+  def isAirplaneLost(inAirFlightData: InAirFlightData, currentTimestamp: Long): Boolean = {
+    val lastSnapshot = inAirFlightData.flightInfo.maxBy(_.updated)
+    !isAirplaneLand(inAirFlightData, currentTimestamp) && lastSnapshot.updated * SECONDS_TO_MS + LOST_TIMEOUT < currentTimestamp
+  }
 
 }

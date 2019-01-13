@@ -43,7 +43,8 @@ object AirportDTO {
     longitude = dto.longitudeAirport.toDouble,
     nameCountry = dto.nameCountry,
     codeIso2Country = dto.codeIso2Country,
-    codeIataCity = dto.codeIataCity
+    codeIataCity = dto.codeIataCity,
+    timezone = dto.timezone
   )
 }
 

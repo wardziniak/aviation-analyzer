@@ -31,14 +31,19 @@ trait PreProcessingTopologyBuilder
     // Airports
     val airportsMaterialized: Materialized[String, Airport, KeyValueStore[Bytes, Array[Byte]]] =
       Materialized.as[String, Airport, KeyValueStore[Bytes, Array[Byte]]](AirportsStoreName)
-    builder.table(AirportsTopic, airportsMaterialized)(Consumed.`with`(Serdes.String(), new GenericSerde[Airport]))
+    airportsMaterialized.withKeySerde(Serdes.String())
+    airportsMaterialized.withValueSerde(new GenericSerde[Airport])
+    builder.table(AirportsTopic)(Consumed.`with`(Serdes.String(), new GenericSerde[Airport]))
+      .filter(Helpers.isEuropeAirport, airportsMaterialized)
+
+    //builder.table(AirportsTopic, airportsMaterialized)(Consumed.`with`(Serdes.String(), new GenericSerde[Airport]))
+
 
     source.transform[String, AnalyticFlightSnapshot](() => InAirTransformer(InAirFlightStoreName, AirportsStoreName), InAirFlightStoreName, AirportsStoreName)
       .peek((key, value) => logger.info(s"AnalyticFlightSnapshot:[$key], [$value]"))
       .to(InAirWithLandedDataTopic)(Produced.`with`(Serdes.String(), new GenericSerde[AnalyticFlightSnapshot]))
 
-    errorStream.peek((key, f) => logger.info(s"[key=$key], [value=$f")).to(ErrorTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
-
+    errorStream.peek((key, f) => logger.trace(s"[key=$key], [value=$f")).to(ErrorTopic)(Produced.`with`(Serdes.String(), new GenericSerde[FlightSnapshot]))
     builder.build()
   }
 }

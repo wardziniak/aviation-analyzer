@@ -8,8 +8,6 @@ object JsonAvroSerializer {
   def serialize[T: SchemaFor: ToRecord](value: T): Array[Byte] = {
     val baos = new ByteArrayOutputStream()
     val output = AvroOutputStream.json[T](baos)
-    output.write(value)
-    output.close()
     if (value != null) {
       output.write(value)
       output.close()

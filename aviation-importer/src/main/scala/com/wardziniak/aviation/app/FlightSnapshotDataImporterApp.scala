@@ -25,7 +25,7 @@ object FlightSnapshotDataImporterApp extends App {
   val cancellable =
     system.scheduler.schedule(
       0 milliseconds,
-      2 minute,
+      4 minute,
       downloaderActor,
       FlightDownloadAction)
 }

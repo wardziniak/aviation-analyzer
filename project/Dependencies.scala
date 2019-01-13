@@ -15,7 +15,7 @@ object Dependencies {
       embeddedKafka, pureConfig) ++ test
     lazy val preProcessing: Seq[ModuleID] = Seq(
       logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest, json4sJackson, zkClient
-    ) //++ test
+    ).map(_.exclude("org.slf4j", "*")) //++ test
     lazy val analyzer: Seq[ModuleID] = Seq(
       postgresqlJdbcDriver,
       logbackClassic, sparkStreaming, sparkSql.excludeAll(ExclusionRule(organization = "org.json4s")),

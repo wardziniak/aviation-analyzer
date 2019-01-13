@@ -56,19 +56,19 @@ services:
       KAFKA_BROKER_ID: 3
     depends_on:
       - zookeeper
-  schema-registry:
-    image: confluentinc/cp-schema-registry:5.1.0
-    ports:
-      - "8081:8081"
-    environment:
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-    depends_on:
-     - zookeeper
-     - kafka1
-     - kafka2
-     - kafka3
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:5.1.0
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+#      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+#    depends_on:
+#     - zookeeper
+#     - kafka1
+#     - kafka2
+#     - kafka3
 #  kafka-rest:
 #    image: confluentinc/cp-kafka-rest:5.1.0
 #    ports:

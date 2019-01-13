@@ -26,7 +26,7 @@ object PreProcessingApp
 
   val preProcessingAppConfig = StreamConfigBuilder()
     .withApplicationId(applicationId = "pre-processing1")
-    .withBootstrapServer(bootstrapServer = "192.168.1.17:9092").build
+    .withBootstrapServer(bootstrapServer = "localhost:9092").build
   val applicationTopology: Topology = buildTopology
 
   runStreamWithConfiguration(topology = applicationTopology, streamProperties = preProcessingAppConfig)
