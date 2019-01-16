@@ -22,7 +22,8 @@ object Versions {
 
   lazy val PureConfig = "0.9.2"
 
-  lazy val kafka = "2.0.1"
+  lazy val kafka = "2.1.0"
+  lazy val Confluent = "5.1.0"
 
   lazy val playWsStandalone = "1.1.10"
 

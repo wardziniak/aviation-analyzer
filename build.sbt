@@ -1,5 +1,7 @@
 import Dependencies._
 
+resolvers in ThisBuild += "Confluent" at "http://packages.confluent.io/maven/"
+
 
 lazy val `aviation-api` = project.
   settings(description := "Aviation analyzer APIs").
@@ -38,6 +40,15 @@ lazy val `data-analyzer` = project.
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Analyzer).
   settings(libraryDependencies ++= Dependencies.Aviation.analyzer)
+
+lazy val `aviation-kafka-connect` = project.
+  dependsOn(`aviation-api`).
+  dependsOn(`aviation-common`).
+  settings(description := "Aviation Kafka connect").
+  settings(Common.Settings: _*).
+  settings(version := Versions.Aviation.Analyzer).
+  settings(libraryDependencies ++= Dependencies.Aviation.aviationKafkaConnect).
+  enablePlugins(AssemblyPlugin)
 
 lazy val `test-project` = project.
   settings(description := "Aviation data Analyzer").

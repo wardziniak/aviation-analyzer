@@ -92,36 +92,44 @@ services:
 #      CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka:9092
 #      CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS: 2
 #      CONTROL_CENTER_CONNECT_CLUSTER: http://kafka-connect:8082
-#  kafka-connect:
-#    image: confluentinc/cp-kafka-connect:5.1.0
-#    ports:
-#      - "8083:8083"
-#    environment:
-#      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
-#      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
-#      CONNECT_BOOTSTRAP_SERVERS: kafka1:29091,kafka2:29092,kafka3:29093
-#      CONNECT_REST_PORT: 8083
-#      CONNECT_GROUP_ID: "aviation-connect"
-#      CONNECT_CONFIG_STORAGE_TOPIC: "aviation-connect-config"
-#      CONNECT_OFFSET_STORAGE_TOPIC: "aviation-connect-offsets"
-#      CONNECT_STATUS_STORAGE_TOPIC: "aviation-connect-status"
-#      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-#      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
-#      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-#      CONNECT_KEY_CONVERTER: "io.confluent.connect.avro.AvroConverter"
-#      CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
-#      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-#      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-#      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
-#      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-#      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-#      CONNECT_LOG4J_ROOT_LOGLEVEL: DEBUG
-#      CONNECT_PLUGIN_PATH: /usr/share/java
-#      CONNECT_REST_HOST_NAME: "kafka-connect"
-#    depends_on:
-#     - zookeeper
-#     - kafka1
-#     - kafka2
-#     - kafka3
+  mongodb:
+    image: mongo:4.0.5
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+     - "27017:27017"
+    volumes:
+     - /Users/bwardzinski/volume/mongodb:/data/db
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:5.1.0
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+      CONNECT_BOOTSTRAP_SERVERS: kafka1:29091,kafka2:29092,kafka3:29093
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: "aviation-connect"
+      CONNECT_CONFIG_STORAGE_TOPIC: "aviation-connect-config"
+      CONNECT_OFFSET_STORAGE_TOPIC: "aviation-connect-offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "aviation-connect-status"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: DEBUG
+      CONNECT_PLUGIN_PATH: /usr/share/java
+      CONNECT_REST_HOST_NAME: "kafka-connect"
+    depends_on:
+     - zookeeper
+     - kafka1
+     - kafka2
+     - kafka3
 #     - schema-registry
 

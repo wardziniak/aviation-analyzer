@@ -1,4 +1,5 @@
-import sbt.Keys.{organization, scalaVersion, scalacOptions, crossPaths}
+import sbt.Keys._
+import sbt.librarymanagement.Resolver
 
 
 object Common {
@@ -13,6 +14,7 @@ object Common {
     scalacOptions +=            "-Xexperimental"
   )
 
+  // "Confluent" at "http://packages.confluent.io/maven/"
 //  val settings =
 //    Map("aviation-api" -> (Common ++ Seq(
 //

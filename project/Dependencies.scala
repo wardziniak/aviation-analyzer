@@ -25,6 +25,9 @@ object Dependencies {
       //sparkTest.excludeAll(ExclusionRule(organization = "org.json4s")),
         embeddedKafka.excludeAll(ExclusionRule(organization = "org.json4s"))
     )
+    lazy val aviationKafkaConnect: Seq[ModuleID] = Seq(
+      kafkaConnect, kafkaConnectTransforms, kafkaConnectJson, conluentJdbcSink
+    )
     lazy val testProject: Seq[ModuleID] = Seq("org.apache.kafka" % "kafka-clients" % "0.9.0.1")
   }
 
@@ -39,8 +42,6 @@ object Dependencies {
   // Serializer
   lazy val avro4sCore = "com.sksamuel.avro4s" %% "avro4s-core" % Versions.Avro4sCore
   lazy val json4sJackson = "org.json4s" %% "json4s-jackson" % Versions.Json4sJackson
-
-
 
   // Tests
   lazy val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest % Test
@@ -57,6 +58,12 @@ object Dependencies {
   val kafkaStreams: ModuleID = "org.apache.kafka" % "kafka-streams" % Versions.kafka
   val kafkaStreamsScala: ModuleID = "org.apache.kafka" %% "kafka-streams-scala" % Versions.kafka
   val kafkaStreamsTest: ModuleID = "org.apache.kafka" % "kafka-streams-test-utils" % Versions.kafka % Test
+
+  val kafkaConnect: ModuleID = "org.apache.kafka" % "connect-api" % Versions.kafka
+  val kafkaConnectTransforms: ModuleID = "org.apache.kafka" % "connect-transforms" % Versions.kafka
+  val kafkaConnectJson: ModuleID = "org.apache.kafka" % "connect-json" % Versions.kafka
+  val conluentJdbcSink: ModuleID = "io.confluent" % "kafka-connect-jdbc" % Versions.Confluent
+
 
   // Spark
   val sparkStreaming: ModuleID = "org.apache.spark" %% "spark-streaming" % Versions.Spark
