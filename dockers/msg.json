@@ -1,0 +1,28 @@
+{
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "type": "string",
+        "optional": false,
+        "field": "name"
+      },
+      {
+      "type": "string",
+      "optional": true,
+      "field": "displayName"
+      },
+      {
+      "type": "int32",
+      "optional": false,
+      "field": "age"
+      }
+    ]
+  },
+  "payload":
+  {
+    "name": "Ronny",
+    "displayName": "O'Sallivan",
+    "age": 43
+  }
+}

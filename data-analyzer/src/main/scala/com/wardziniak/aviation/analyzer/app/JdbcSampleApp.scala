@@ -30,6 +30,8 @@ object JdbcSampleApp extends App {
   val schema = ScalaReflection.schemaFor[Person].dataType.asInstanceOf[StructType]
 
 
+  session.read
+
   val people = df.selectExpr(s"CAST(value AS STRING) AS json")
     .select(from_json($"json", schema) as "data")
     .select("data.*").as[Person].map(p => p.copy(age = p.age+7))

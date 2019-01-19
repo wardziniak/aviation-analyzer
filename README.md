@@ -37,5 +37,16 @@ Parts:
 Kafka Streams is used for preprocess data for spark. 
 At spark model will
 
+To start application:
+1. Setup environment with script: ./environment_setup.sh // Note, that kafka-connect plugins have to placed in proper directory
+2. Load Kafka Connect Sink configuration to copy data to mongo 
+3. Import Airport information
+4. Start loading real data regarding Flights
+5. Start preprocessing application
+6. Run Train model app
+7. Run predication landing information app 
+
+
+
 
 

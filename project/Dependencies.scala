@@ -26,7 +26,7 @@ object Dependencies {
         embeddedKafka.excludeAll(ExclusionRule(organization = "org.json4s"))
     )
     lazy val aviationKafkaConnect: Seq[ModuleID] = Seq(
-      kafkaConnect, kafkaConnectTransforms, kafkaConnectJson, conluentJdbcSink
+      kafkaConnect, kafkaConnectTransforms, kafkaConnectJson, conluentJdbcSink,kafkaConnectRuntime
     )
     lazy val testProject: Seq[ModuleID] = Seq("org.apache.kafka" % "kafka-clients" % "0.9.0.1")
   }
@@ -62,6 +62,7 @@ object Dependencies {
   val kafkaConnect: ModuleID = "org.apache.kafka" % "connect-api" % Versions.kafka
   val kafkaConnectTransforms: ModuleID = "org.apache.kafka" % "connect-transforms" % Versions.kafka
   val kafkaConnectJson: ModuleID = "org.apache.kafka" % "connect-json" % Versions.kafka
+  val kafkaConnectRuntime: ModuleID =  "org.apache.kafka" % "connect-runtime" % Versions.kafka
   val conluentJdbcSink: ModuleID = "io.confluent" % "kafka-connect-jdbc" % Versions.Confluent
 
 
