@@ -1,19 +1,12 @@
 version: '3.5'
-#networks:
-#  aviation:
-#    external: true
 services:
   zookeeper:
-#    networks:
-#      - aviation
     image: confluentinc/cp-zookeeper:5.1.0
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
       - "2181:2181"
   kafka1:
-#    networks:
-#      - aviation
     image: confluentinc/cp-kafka:5.1.0
     ports:
       - "9092:9092"
@@ -22,13 +15,10 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:29091,PLAINTEXT_HOST://${HOST_NAME}:9092
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_BROKER_ID: 1
     depends_on:
       - zookeeper
   kafka2:
-#    networks:
-#      - aviation
     image: confluentinc/cp-kafka:5.1.0
     ports:
       - "9093:9093"
@@ -37,13 +27,10 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:29092,PLAINTEXT_HOST://${HOST_NAME}:9093
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_BROKER_ID: 2
     depends_on:
       - zookeeper
   kafka3:
-#    networks:
-#      - aviation
     image: confluentinc/cp-kafka:5.1.0
     ports:
       - "9094:9094"
@@ -52,46 +39,9 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:29093,PLAINTEXT_HOST://${HOST_NAME}:9094
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_BROKER_ID: 3
     depends_on:
       - zookeeper
-#  schema-registry:
-#    image: confluentinc/cp-schema-registry:5.1.0
-#    ports:
-#      - "8081:8081"
-#    environment:
-#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
-#      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-#      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-#    depends_on:
-#     - zookeeper
-#     - kafka1
-#     - kafka2
-#     - kafka3
-#  kafka-rest:
-#    image: confluentinc/cp-kafka-rest:5.1.0
-#    ports:
-#      - "8082:8082"
-#    environment:
-#      KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper:2181
-#      KAFKA_REST_LISTENERS: http://0.0.0.0:8082
-#      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-#      KAFKA_REST_HOST_NAME: kafka-rest
-#    depends_on:
-#      - zookeeper
-#      - schema-registry
-#  control-center:
-#    image: confluentinc/cp-enterprise-control-center:5.1.0
-#    networks:
-#      - aviation
-#    ports:
-#      - "9021:9021"
-#    environment:
-#      CONTROL_CENTER_ZOOKEEPER_CONNECT: zookeeper:2181
-#      CONTROL_CENTER_BOOTSTRAP_SERVERS: kafka:9092
-#      CONTROL_CENTER_STREAMS_NUM_STREAM_THREADS: 2
-#      CONTROL_CENTER_CONNECT_CLUSTER: http://kafka-connect:8082
   mongodb:
     image: mongo:4.0.5
 #    environment:
@@ -108,8 +58,6 @@ services:
     volumes:
      - /Users/bwardzinski/volume/aviation/kafka-connect-plugins:/plugins
     environment:
-#      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
-#      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
       CONNECT_BOOTSTRAP_SERVERS: kafka1:29091,kafka2:29092,kafka3:29093
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: "aviation-connect"
