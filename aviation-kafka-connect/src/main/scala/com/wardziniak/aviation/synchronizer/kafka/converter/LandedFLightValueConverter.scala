@@ -13,7 +13,7 @@ import org.apache.kafka.connect.storage.Converter
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-class AviationConverter extends Converter {
+class LandedFLightValueConverter extends Converter {
   private val deserializer = new JsonDeserializer
 
   private def asConnectSchema(jsonNode: JsonNode): Schema = {

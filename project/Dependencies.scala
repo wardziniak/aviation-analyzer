@@ -22,11 +22,12 @@ object Dependencies {
       sparkSqlKafka.excludeAll(ExclusionRule(organization = "org.json4s")),
       sparkStreamingKafka.excludeAll(ExclusionRule(organization = "org.json4s")),
       sparkMlLib.excludeAll(ExclusionRule(organization = "org.json4s")),
+      mongoSparkConnector,
       //sparkTest.excludeAll(ExclusionRule(organization = "org.json4s")),
         embeddedKafka.excludeAll(ExclusionRule(organization = "org.json4s"))
     )
     lazy val aviationKafkaConnect: Seq[ModuleID] = Seq(
-      kafkaConnect, kafkaConnectTransforms, kafkaConnectJson, conluentJdbcSink,kafkaConnectRuntime
+      kafkaConnect, kafkaConnectTransforms, kafkaConnectJson, conluentJdbcSink,kafkaConnectRuntime, springKafka
     )
     lazy val testProject: Seq[ModuleID] = Seq("org.apache.kafka" % "kafka-clients" % "0.9.0.1")
   }
@@ -73,6 +74,9 @@ object Dependencies {
   val sparkSql: ModuleID = "org.apache.spark" %% "spark-sql" % Versions.Spark
   val sparkMlLib: ModuleID = "org.apache.spark" %% "spark-mllib" % Versions.Spark
   val sparkTest: ModuleID = "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0" % "test"
+  val mongoSparkConnector: ModuleID = "org.mongodb.spark" %% "mongo-spark-connector" % Versions.MongoSparkConnector
+
+  val springKafka = "org.springframework.kafka" % "spring-kafka" % "2.2.2.RELEASE"
 
   val zkClient: ModuleID = "com.101tec" % "zkclient" % "0.10"
 

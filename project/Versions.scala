@@ -30,4 +30,5 @@ object Versions {
   lazy val logbackClassic = "1.2.3"
   lazy val scalaLogging = "3.9.0"
   lazy val Spark = "2.4.0"
+  lazy val MongoSparkConnector = "2.4.0"
 }
