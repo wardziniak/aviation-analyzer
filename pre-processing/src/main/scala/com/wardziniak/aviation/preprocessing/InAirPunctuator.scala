@@ -42,10 +42,10 @@ case class InAirPunctuator(
     val flightInAirIterator: KeyValueIterator[String, InAirFlightData] = inAirStore.all()
 
     val inAirPlanes = flightInAirIterator.asScala.toList
-    val landedAirplanes = inAirPlanes.filter(inAirFlightData => Helpers.isAirplaneLand(inAirFlightData.value, timestamp))
+    val landedAirplanes = inAirPlanes.filter(inAirFlightData => Helpers.isAirplaneLand(inAirFlightData.value, airportStore, timestamp))
       .map(flightData => {
-        val landedSnapshot = flightData.value.flightInfo.maxBy(_.updated)
-        val destinationAirport = airportStore.get(landedSnapshot.arrival.iata)
+        val destinationAirport = airportStore.get(flightData.value.flightInfo.head.arrival.iata)
+        val landedSnapshot = Helpers.findLandedSnapshot(flightData.value.flightInfo, destinationAirport)
         val landedTimestamp = Helpers.calculateLandingTime(landedSnapshot, destinationAirport)
         val duplicatedValues = flightData.value.flightInfo.sortBy(_.updated).distinct
 

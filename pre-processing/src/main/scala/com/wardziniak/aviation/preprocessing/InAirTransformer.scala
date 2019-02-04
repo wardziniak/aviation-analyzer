@@ -17,11 +17,13 @@ case class InAirTransformer(inAirFlightsStoreName: String, airportStoreName: Str
   var airportStore: KeyValueStore[String, Airport] = _
 
   var state: KeyValueStore[String, InAirFlightData] = _
+  var context: ProcessorContext = _
 
   override def init(context: ProcessorContext): Unit = {
     logger.info(s"Init InAirTransformer")
     inAirStore = context.getStateStore(inAirFlightsStoreName).asInstanceOf[KeyValueStore[String, InAirFlightData]]
     airportStore = context.getStateStore(airportStoreName).asInstanceOf[KeyValueStore[String, Airport]]
+    this.context = context
     context.schedule(
       PUNCTUATION_INTERVAL,
       PunctuationType.WALL_CLOCK_TIME,
@@ -30,20 +32,15 @@ case class InAirTransformer(inAirFlightsStoreName: String, airportStoreName: Str
   }
 
   override def transform(iata: String, flightSnapshot: FlightSnapshot): KeyValue[String, AnalyticFlightSnapshot] = {
-    if (airportStore.get(flightSnapshot.departure.iata) != null && airportStore.get(flightSnapshot.arrival.iata) != null) {
+    if (flightSnapshot.updated * 1000 + ORPHAN_RECORD_TIMEOUT_MS > context.timestamp() &&
+      airportStore.get(flightSnapshot.departure.iata) != null &&
+      airportStore.get(flightSnapshot.arrival.iata) != null) {
       Option(inAirStore.get(iata))
         .map(_.addSnapshot(flightSnapshot))
         .orElse(Some(InAirFlightData(flightSnapshot)))
         .foreach(inAirStore.put(iata, _))
     }
     null
-
-
-//    Option(inAirStore.get(iata))
-//      .map(_.addSnapshot(flightSnapshot))
-//      .orElse(Some(InAirFlightData(flightSnapshot)))
-//      .foreach(inAirStore.put(iata, _))
-//    null
   }
 
   override def close(): Unit = {

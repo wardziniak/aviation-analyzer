@@ -53,6 +53,7 @@ object PocKafkaAllFieldStructureStreaming extends App {
 
   allFields.printSchema()
 
+//  allFields.withWatermark
 
 
   val sQuery: StreamingQuery = allFields.writeStream.trigger(Trigger.ProcessingTime("5 second"))

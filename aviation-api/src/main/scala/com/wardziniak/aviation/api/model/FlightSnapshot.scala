@@ -37,7 +37,14 @@ case class FlightSnapshot(
       enRoute = this.enRoute,
       updated = this.updated,
       landedTimestamp = landedTimestamp,
-      arrivalAirport = arrivalAirport
+      arrivalAirport = arrivalAirport,
+      distance = ModelUtils.calculateDistance(
+        fromLatitude = localization.latitude,
+        fromLongitude = localization.longitude,
+        toLatitude = arrivalAirport.latitude,
+        toLongitude = arrivalAirport.longitude,
+        airplaneAltitude = localization.altitude
+      )
     )
   }
 
@@ -71,12 +78,26 @@ case class AnalyticFlightSnapshot(
   enRoute: String,
   updated: Long,
   landedTimestamp: Long,
-  arrivalAirport: Airport
+  arrivalAirport: Airport,
+  distance: Double
 ) extends Value {
 
 
   def withAirportGeoLocation(latitude: Double, longitude: Double): AnalyticFlightSnapshot = {
     this
   }
-
 }
+
+case class TrainFlightSnapshot(
+  localization: Localization,
+  speed: Speed,
+  departure: AirportCode,
+  arrival: AirportCode,
+  aircraft: AircraftCode,
+  flightNumber: FlightNumber,
+  airlineCode: AirlineCode,
+  enRoute: String,
+  updated: Long,
+  landedTimestamp: Long,
+  arrivalAirport: Airport,
+)
