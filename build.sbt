@@ -50,8 +50,18 @@ lazy val `aviation-kafka-connect` = project.
   settings(libraryDependencies ++= Dependencies.Aviation.aviationKafkaConnect).
   enablePlugins(AssemblyPlugin)
 
+lazy val `data-processor` = project.
+  dependsOn(`aviation-api`).
+  dependsOn(`aviation-common`).
+  settings(description := "Raw data Processor").
+  settings(Common.Settings: _*).
+  settings(version := Versions.Aviation.Analyzer).
+  settings(libraryDependencies ++= Dependencies.Aviation.dataProcessor)
+
 lazy val `test-project` = project.
   settings(description := "Aviation data Analyzer").
   settings(Common.Settings: _*).
   settings(version := Versions.Aviation.Analyzer).
   settings(libraryDependencies ++= Dependencies.Aviation.testProject)
+
+

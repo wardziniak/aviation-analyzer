@@ -17,19 +17,21 @@ object Dependencies {
       logbackClassic, kafkaStreamsScala, embeddedKafka, pureConfig, specs2Core, kafkaStreamsTest, json4sJackson, zkClient
     ).map(_.exclude("org.slf4j", "*")) //++ test
     lazy val analyzer: Seq[ModuleID] = Seq(
-      postgresqlJdbcDriver,
+      postgresqlJdbcDriver, sparkCore,
       logbackClassic, sparkStreaming, sparkSql.excludeAll(ExclusionRule(organization = "org.json4s")),
       sparkSqlKafka.excludeAll(ExclusionRule(organization = "org.json4s")),
       sparkStreamingKafka.excludeAll(ExclusionRule(organization = "org.json4s")),
       sparkMlLib.excludeAll(ExclusionRule(organization = "org.json4s")),
       mongoSparkConnector,
+      elasticsearchHadoop,
       //sparkTest.excludeAll(ExclusionRule(organization = "org.json4s")),
         embeddedKafka.excludeAll(ExclusionRule(organization = "org.json4s"))
     )
     lazy val aviationKafkaConnect: Seq[ModuleID] = Seq(
       kafkaConnect, kafkaConnectTransforms, kafkaConnectJson, conluentJdbcSink,kafkaConnectRuntime, springKafka
     )
-    lazy val testProject: Seq[ModuleID] = Seq("org.apache.kafka" % "kafka-clients" % "0.9.0.1")
+    lazy val testProject: Seq[ModuleID] = Seq(sparkCore, elasticsearchHadoop, sparkSql)
+    lazy val dataProcessor: Seq[ModuleID] = Seq(logbackClassic, kafkaStreamsScala, kafkaStreamsTest, pureConfig, specs2Core)
   }
 
 
@@ -71,10 +73,12 @@ object Dependencies {
   val sparkStreaming: ModuleID = "org.apache.spark" %% "spark-streaming" % Versions.Spark
   val sparkSqlKafka = "org.apache.spark" %% "spark-sql-kafka-0-10" % Versions.Spark
   val sparkStreamingKafka: ModuleID =  "org.apache.spark" %% "spark-streaming-kafka-0-10" % Versions.Spark
+  val sparkCore = "org.apache.spark" %% "spark-core" %  Versions.Spark
   val sparkSql: ModuleID = "org.apache.spark" %% "spark-sql" % Versions.Spark
   val sparkMlLib: ModuleID = "org.apache.spark" %% "spark-mllib" % Versions.Spark
   val sparkTest: ModuleID = "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0" % "test"
   val mongoSparkConnector: ModuleID = "org.mongodb.spark" %% "mongo-spark-connector" % Versions.MongoSparkConnector
+  val elasticsearchHadoop: ModuleID = "org.elasticsearch" % "elasticsearch-hadoop" % "6.1.0"
 
   val springKafka = "org.springframework.kafka" % "spring-kafka" % "2.2.2.RELEASE"
 
