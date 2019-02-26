@@ -1,54 +1,41 @@
 package com.wardziniak.aviation.processing
 
-import java.time.Duration
-import java.util
-
 import com.wardziniak.aviation.api.model.{FlightSnapshot, InAirFlightData}
+import com.wardziniak.aviation.api.model.FlightSnapshot.FlightNumberIata
 import com.wardziniak.aviation.common.serialization.GenericSerde
-import com.wardziniak.aviation.processing.DataProcessorTopologyBuilder.Container
-import com.wardziniak.aviation.processing.internal.Cleaning.CleaningTransformer
-import com.wardziniak.aviation.processing.internal.Deduplication.DeduplicationTransformer
-import com.wardziniak.aviation.processing.internal.windows.CustomWindowedTransformerBuilder
-import com.wardziniak.aviation.processing.internal.{ImputationTransformer, NormalizationTransformer}
+import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.scala.StreamsBuilder
+import org.apache.kafka.streams.scala.kstream.{Consumed, KStream, Produced}
+import org.apache.kafka.streams.state.{KeyValueStore, StoreBuilder, Stores}
 import com.wardziniak.aviation.processing.storeNames._
 import com.wardziniak.aviation.processing.topicNames._
-import org.apache.kafka.streams.kstream.Produced
-import org.apache.kafka.streams.{KeyValue, Topology}
-import org.apache.kafka.streams.scala.kstream.Consumed
-import org.apache.kafka.streams.scala.{Serdes, StreamsBuilder}
-import org.apache.kafka.streams.state.{KeyValueStore, StoreBuilder, Stores}
+import java.time.{Duration => JDuration}
 
-import scala.collection.JavaConverters._
+import com.wardziniak.aviation.processing.internal.Deduplication.DeduplicationTransformer
+import com.wardziniak.aviation.processing.internal.FlightGrouper.FlightGrouperTransformer
+import com.wardziniak.aviation.processing.internal.Cleaning.CleaningTransformer
 
 
 trait DataProcessorTopologyBuilder {
 
-
   def buildTopology: Topology = {
+    val expirationTimeout: JDuration = JDuration.ofMinutes(20)
+
     val builder = new StreamsBuilder()
+    val flightGrouperStore: StoreBuilder[KeyValueStore[FlightNumberIata, InAirFlightData]] =
+      Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(FlightGrouperStoreName), GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]())
+    builder.addStateStore(flightGrouperStore)
 
+    builder
+      .stream(RawDataInputTopic)(Consumed.`with`(GenericSerde[FlightNumberIata](), GenericSerde[FlightSnapshot]()))
+      .transform(() => FlightGrouperTransformer(expirationTimeout, FlightGrouperStoreName), FlightGrouperStoreName)
+      .to(FlightGroupedTopic)(Produced.`with`(GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]()))
 
-    // creation of needed store for Transformers and Processors
-
-//    val deduplicationStore: StoreBuilder[KeyValueStore[String, FlightSnapshot]] =
-//      Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(DeduplicationStoreName), Serdes.String, GenericSerde[FlightSnapshot]())
-//    builder.addStateStore(deduplicationStore)
-
-    val stream = builder.stream[String, String]("input")(Consumed.`with`(Serdes.String, Serdes.String))
-
-    CustomWindowedTransformerBuilder.aggregationWithCustomWindow[String, String, Container[String]] (stream, builder)(
-      initializer = () => Container(List()),
-      aggregator = (_, value, agg) => agg.copy(elements = value :: agg.elements),
-      closingWindowPredicate = (_, _, agg) => agg.elements.size == 5,
-      expirationTimeout = Duration.ofSeconds(60),
-      keySerde = Serdes.String,
-      aggValueSerde = GenericSerde[Container[String]]()
-    ).flatMap[String, String]((k, value) => value.elements.map(v => (k, v)))
-      .to("output")(Produced.`with`(Serdes.String, Serdes.String))
-
+    builder.stream(FlightGroupedTopic)(Consumed.`with`(GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]()))
+      .transformValues(() => DeduplicationTransformer())
+      .transformValues(() => CleaningTransformer())
     builder.build()
   }
-
 }
 
 object DataProcessorTopologyBuilder {

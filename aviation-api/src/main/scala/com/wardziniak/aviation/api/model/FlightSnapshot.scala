@@ -2,15 +2,35 @@ package com.wardziniak.aviation.api.model
 
 import scala.language.implicitConversions
 
-case class Localization(latitude: Double, longitude: Double, altitude: Double, direction: Double)
+case class Localization(latitude: Double, longitude: Double, altitude: Double, direction: Double) {
+  def getNthLocation(size: Int, number: Int, destination: Localization) =
+    this.copy(
+      latitude = latitude + (destination.latitude - latitude) / size * number,
+      longitude = longitude + (destination.longitude - longitude) / size * number,
+      altitude = altitude + (destination.altitude - altitude) / size * number,
+      direction = direction + (destination.direction - direction) / size * number
+    )
+}
 
-case class Speed(horizontal: Double, isGround: Boolean, vertical: Double)
+case class Speed(horizontal: Double, isGround: Boolean, vertical: Double) {
+  def getNthLocation(size: Int, number: Int, destination: Speed) =
+    this.copy(
+      horizontal = horizontal + (destination.horizontal - horizontal) / size * number,
+      isGround = destination.isGround,
+      vertical = vertical + (destination.vertical - vertical) / size * number
+    )
+}
 
 case class AirportCode(iata: String, icao: String)
 
 case class AircraftCode(regNumber: String, icao: String, icao24: String, iata: String)
 
 case class FlightNumber(iata: String, icao: String, number: String)
+
+object FlightSnapshot {
+  type FlightNumberIata = String
+  type FlightNumberIcao = String
+}
 
 case class AirlineCode(iata: String, icao: String)
 

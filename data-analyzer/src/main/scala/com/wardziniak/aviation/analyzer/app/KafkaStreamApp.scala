@@ -1,9 +1,10 @@
 package com.wardziniak.aviation.analyzer.app
 
 import com.wardziniak.aviation.analyzer.app.SampleApp.ssc
-import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.SparkConf
+import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
@@ -22,7 +23,7 @@ object KafkaStreamApp extends App {
     ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer])
 
 
-  val messages = KafkaUtils.createDirectStream[String, String](
+  val messages: InputDStream[ConsumerRecord[String, String]] = KafkaUtils.createDirectStream[String, String](
     ssc,
     LocationStrategies.PreferConsistent,
     ConsumerStrategies.Subscribe[String, String](Set("topicA"), kafkaParams))

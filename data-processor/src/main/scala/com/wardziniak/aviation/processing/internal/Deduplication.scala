@@ -1,28 +1,24 @@
 package com.wardziniak.aviation.processing.internal
 
-import com.wardziniak.aviation.api.model.FlightSnapshot
-import org.apache.kafka.streams.KeyValue
+import com.wardziniak.aviation.api.model.FlightSnapshot.FlightNumberIata
+import com.wardziniak.aviation.api.model.InAirFlightData
+import org.apache.kafka.streams.kstream.ValueTransformerWithKey
 import org.apache.kafka.streams.processor.ProcessorContext
-import org.apache.kafka.streams.state.KeyValueStore
 
 object Deduplication {
 
-  case class DeduplicationTransformer(deduplicationStoreName: String) extends AbstractTransformer[String, FlightSnapshot, KeyValue[String, FlightSnapshot]] {
+  case class DeduplicationTransformer()
+    extends ValueTransformerWithKey[FlightNumberIata, InAirFlightData, InAirFlightData] {
 
-    var deduplicationStore: KeyValueStore[String, FlightSnapshot] = _
+    override def init(context: ProcessorContext): Unit = {}
 
-    override def init(context: ProcessorContext): Unit = {
-      deduplicationStore = context.getStateStore(deduplicationStoreName).asInstanceOf[KeyValueStore[String, FlightSnapshot]]
-      // TODO: Add Punctuator to pass "very old" snapshot (last snapshot - now will trigger it) - no new is possible.
-    }
+    override def close(): Unit = {}
 
-    override def transform(flightNumberIata: String, currentSnapshot: FlightSnapshot): KeyValue[String, FlightSnapshot] = {
-      val lastSnapshot = deduplicationStore.get(flightNumberIata)
-      deduplicationStore.put(flightNumberIata, currentSnapshot)
-      // same current time, so we can skip lastSnapshot (deduplicate)
-      if (lastSnapshot.updated == currentSnapshot.updated) null
-      else new KeyValue[String, FlightSnapshot](flightNumberIata, lastSnapshot)
+    override def transform(flightNumberIata: FlightNumberIata, inAirFlightData: InAirFlightData): InAirFlightData = {
+      val deduplicated = inAirFlightData
+        .flightInfo
+        .groupBy(_.updated).map(_._2.head).toList
+      InAirFlightData(lastTimeStamp = inAirFlightData.lastTimeStamp, flightInfo = deduplicated)
     }
   }
-
 }
