@@ -12,7 +12,6 @@ import com.wardziniak.aviation.processing.topicNames._
 import java.time.{Duration => JDuration}
 
 import com.wardziniak.aviation.processing.internal.Deduplication.DeduplicationTransformer
-import com.wardziniak.aviation.processing.internal.FlightGrouper.FlightGrouperTransformer
 import com.wardziniak.aviation.processing.internal.Cleaning.CleaningTransformer
 
 
@@ -26,15 +25,16 @@ trait DataProcessorTopologyBuilder {
       Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(FlightGrouperStoreName), GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]())
     builder.addStateStore(flightGrouperStore)
 
-    builder
-      .stream(RawDataInputTopic)(Consumed.`with`(GenericSerde[FlightNumberIata](), GenericSerde[FlightSnapshot]()))
-      .transform(() => FlightGrouperTransformer(expirationTimeout, FlightGrouperStoreName), FlightGrouperStoreName)
-      .to(FlightGroupedTopic)(Produced.`with`(GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]()))
-
-    builder.stream(FlightGroupedTopic)(Consumed.`with`(GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]()))
-      .transformValues(() => DeduplicationTransformer())
-      .transformValues(() => CleaningTransformer())
-    builder.build()
+//    builder
+//      .stream(RawDataInputTopic)(Consumed.`with`(GenericSerde[FlightNumberIata](), GenericSerde[FlightSnapshot]()))
+//      .transform(() => FlightGrouperTransformer(expirationTimeout, FlightGrouperStoreName), FlightGrouperStoreName)
+//      .to(FlightGroupedTopic)(Produced.`with`(GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]()))
+//
+//    builder.stream(FlightGroupedTopic)(Consumed.`with`(GenericSerde[FlightNumberIata](), GenericSerde[InAirFlightData]()))
+//      .transformValues(() => DeduplicationTransformer())
+//      .transformValues(() => CleaningTransformer())
+//    builder.build()
+    ???
   }
 }
 
