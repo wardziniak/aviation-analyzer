@@ -5,10 +5,11 @@ import java.time.Duration
 import com.wardziniak.aviation.api.model.FlightSnapshot.FlightNumberIata
 import com.wardziniak.aviation.api.model.{FlightSnapshot, InAirFlightData}
 import com.wardziniak.aviation.processing.internal.ProcessorHelper.ProcessorWithStateStoreAndPunctuator
+import org.apache.kafka.streams.processor.Punctuator
 import org.apache.kafka.streams.state.KeyValueIterator
 
 /**
-  * It should group/hold all flightsnapshot, till it discover, that plane landed
+  * It should group/hold all flightSnapshot, till it discover, that plane landed and add landed time to snapshots data
   */
 object FlightGrouper {
 
@@ -24,16 +25,12 @@ object FlightGrouper {
     override def punctuate(currentTimestamp: Long): Unit = {
       import collection.JavaConverters._
       val inAirFlightDataIterator: KeyValueIterator[FlightNumberIata, InAirFlightData] = stateStore.all()
-
       val flightDataList = inAirFlightDataIterator.asScala.toList
-      val oldFlightDataList = flightDataList.filter(_.value.lastTimeStamp + expirationTimeout.toMillis < context.timestamp())
-
-      // At least MINIMAL_SNAPSHOT_SIZE has to be grouped to pass. If it less and data expired drop them.
-      oldFlightDataList
-        .filter(_.value.flightInfo.size > MINIMAL_SNAPSHOT_SIZE)
-        .foreach(flightData => context.forward(flightData.key, flightData.value))
-
       inAirFlightDataIterator.close()
+
+      val oldFlightDataList = flightDataList.filter(_.value.lastTimeStamp + expirationTimeout.toMillis < context.timestamp())
+      oldFlightDataList
+        .foreach(flightData => context.forward(flightData.key, flightData.value))
       oldFlightDataList.map(_.key).foreach(stateStore.delete)
     }
 

@@ -2,10 +2,10 @@ package com.wardziniak.aviation.common.serialization
 
 import java.util
 
-import com.sksamuel.avro4s.{ SchemaFor, ToRecord }
+import com.sksamuel.avro4s.{Decoder, Encoder, SchemaFor, ToRecord}
 import org.apache.kafka.common.serialization.Serializer
 
-case class GenericSerializer[T: SchemaFor: ToRecord]() extends Serializer[T] {
+case class GenericSerializer[T: Decoder: Encoder]() extends Serializer[T] {
 
   override def configure(configs: util.Map[String, _], isKey: Boolean) = {}
 

@@ -2,18 +2,13 @@ package com.wardziniak.aviation.processing.internal
 
 import java.time.Duration
 
-import com.wardziniak.aviation.api.model.{FlightSnapshot, InAirFlightData}
 import com.wardziniak.aviation.api.model.FlightSnapshot.FlightNumberIata
-import org.apache.kafka.streams.kstream.ValueTransformerWithKey
-import org.apache.kafka.streams.processor.{AbstractProcessor, ProcessorContext}
-import org.apache.kafka.streams.state.KeyValueStore
+import com.wardziniak.aviation.api.model.{FlightSnapshot, InAirFlightData}
+import org.apache.kafka.streams.processor.AbstractProcessor
 
-object Imputation {
+object Normalization {
 
-  val Interval: Duration = ???
-
-
-  case class ImputationProcessor(windowsSize: Duration) extends AbstractProcessor[FlightNumberIata, InAirFlightData] {
+  case class NormalizationProcessor(windowsSize: Duration) extends AbstractProcessor[FlightNumberIata, InAirFlightData] {
     override def process(flightNumberIata: FlightNumberIata, inAirFlightData: InAirFlightData): Unit = {
       val snapshots = inAirFlightData.flightInfo
 
@@ -30,9 +25,10 @@ object Imputation {
         .filter(f => windowsSize.minus(Duration.ofSeconds(f._2.updated - f._1.updated)).isNegative) // filtered out only pair with long break
         .flatMap(f => Seq(f._1, calculateMidSnapshot(f._1, f._2), f._2))
         .toList.sortBy(_.updated)
-//        .foreach(snapshot => context().forward(flightNumberIata, snapshot))
+      //        .foreach(snapshot => context().forward(flightNumberIata, snapshot))
     }
 
     private def calculateMidSnapshot(begin: FlightSnapshot, end: FlightSnapshot): FlightSnapshot = ???
   }
+
 }

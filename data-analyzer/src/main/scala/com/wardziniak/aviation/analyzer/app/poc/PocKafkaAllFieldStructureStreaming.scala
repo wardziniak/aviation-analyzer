@@ -2,8 +2,8 @@ package com.wardziniak.aviation.analyzer.app.poc
 
 import com.wardziniak.aviation.analyzer.app.PocStructureStreamKafkaApp.Person
 import org.apache.spark.sql.catalyst.ScalaReflection
-import org.apache.spark.sql.streaming.{StreamingQuery, Trigger}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.streaming.{DataStreamWriter, StreamingQuery, Trigger}
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 import org.apache.spark.sql.types.StructType
 
 object PocKafkaAllFieldStructureStreaming extends App {
@@ -20,13 +20,14 @@ object PocKafkaAllFieldStructureStreaming extends App {
   val df: DataFrame = session.readStream
     .format("kafka")
     .option("kafka.bootstrap.servers", "localhost:9092")
-    .option("subscribe", "topicIn")
+    .option("startingOffsets", "earliest")
+    .option("subscribe", "input")
     .load()
 
   val schema = ScalaReflection.schemaFor[Person].dataType.asInstanceOf[StructType]
 
   val allFields = df.selectExpr(
-    s"CAST(value AS STRING) AS csv",
+    s"CAST(value AS STRING) AS value",
   s"CAST(key AS STRING) AS key",
     s"topic as topic",
     s"partition as partition",
@@ -34,14 +35,14 @@ object PocKafkaAllFieldStructureStreaming extends App {
     s"timestamp as timestamp",
     s"timestampType as timestampType"
   )
-    .select(concat(
-      $"key", lit(":"),
-    $"value", lit(":"),
-    $"topic", lit(":"),
-    $"offset", lit(":"),
-    $"timestamp", lit(":"),
-    $"timestampType", lit(":")
-    ).alias("value"))
+//    .select(concat(
+//      $"key", lit(":"),
+//    $"value", lit(":"),
+//    $"topic", lit(":"),
+//    $"offset", lit(":"),
+//    $"timestamp", lit(":"),
+//    $"timestampType", lit(":")
+//    ).alias("value"))
 
 
 //  val results = df.select(s"CAST(value AS STRING) AS value")
@@ -56,15 +57,22 @@ object PocKafkaAllFieldStructureStreaming extends App {
 //  allFields.withWatermark
 
 
-  val sQuery: StreamingQuery = allFields.writeStream.trigger(Trigger.ProcessingTime("5 second"))
+  val dataStreamWriter: DataStreamWriter[Row] = allFields.writeStream
+
+  val sQuery: StreamingQuery = allFields.writeStream
+//    .trigger(Trigger.ProcessingTime("5 second"))
     .option("checkpointLocation", "/tmp/checkpoint/")
+//    .outputMode("append")
+    .format("parquet")
     .option("kafka.bootstrap.servers", "localhost:9092")
-    .option("topic", "topicOut")
+    .option("kafka.partitioner.class", "com.wardziniak.aviation.analyzer.app.poc.CustomKafkaPartitioner")
+    .option("topic", "output")
     .format("kafka")
     .start("/tmp/streamBar")
 
 
+  sQuery.awaitTermination
 
-  sQuery.awaitTermination(30000)
+  //sQuery.awaitTermination(30000)
 
 }

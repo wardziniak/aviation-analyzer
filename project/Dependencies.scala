@@ -4,7 +4,7 @@ object Dependencies {
 
   object Aviation {
     lazy val api: Seq[ModuleID] = Seq() ++ test
-    lazy val common: Seq[ModuleID] = Seq(avro4sCore, kafkaClient, scalaLogging, embeddedKafka, specs2Core) ++ test
+    lazy val common: Seq[ModuleID] = Seq(avro4sCore, avro4sJson, kafkaClient, scalaLogging, embeddedKafka, specs2Core) ++ test
     lazy val importer: Seq[ModuleID] = Seq(
       logbackClassic,
       playWsStandaloneJson,
@@ -44,6 +44,7 @@ object Dependencies {
 
   // Serializer
   lazy val avro4sCore = "com.sksamuel.avro4s" %% "avro4s-core" % Versions.Avro4sCore
+  lazy val avro4sJson = "com.sksamuel.avro4s" %% "avro4s-json" % Versions.Avro4sCore
   lazy val json4sJackson = "org.json4s" %% "json4s-jackson" % Versions.Json4sJackson
 
   // Tests

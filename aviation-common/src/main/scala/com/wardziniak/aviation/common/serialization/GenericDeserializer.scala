@@ -2,10 +2,10 @@ package com.wardziniak.aviation.common.serialization
 
 import java.util
 
-import com.sksamuel.avro4s.{ FromRecord, SchemaFor }
+import com.sksamuel.avro4s.{Decoder, FromRecord, SchemaFor}
 import org.apache.kafka.common.serialization.Deserializer
 
-case class GenericDeserializer[T >: Null: SchemaFor: FromRecord]() extends Deserializer[T] {
+case class GenericDeserializer[T >: Null: Decoder]() extends Deserializer[T] {
 
   override def configure(configs: util.Map[String, _], isKey: Boolean) = {}
 

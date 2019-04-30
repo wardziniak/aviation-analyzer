@@ -26,6 +26,8 @@ trait PreProcessingTopologyBuilder
       Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(InAirFlightStoreName), Serdes.String, GenericSerde[InAirFlightData]())
     builder.addStateStore(flightsInAirStore)
 
+    flightsInAirStore.withCachingEnabled()
+
     // Parsing data from raw topic
     val streamsArray = builder.stream(RawInputTopic)(Consumed.`with`(Serdes.String, GenericSerde[FlightSnapshot]()))
       //.filter((_, flightInfo) => flightInfo.airlineCode.iata == "LH")

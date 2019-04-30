@@ -2,7 +2,7 @@ package com.wardziniak.aviation.processing.internal
 
 import java.time.Duration
 
-import org.apache.kafka.streams.processor.{AbstractProcessor, ProcessorContext, PunctuationType}
+import org.apache.kafka.streams.processor.{AbstractProcessor, ProcessorContext, PunctuationType, Punctuator}
 import org.apache.kafka.streams.state.KeyValueStore
 
 object ProcessorHelper {
@@ -23,7 +23,7 @@ object ProcessorHelper {
 
     override def init(context: ProcessorContext): Unit = {
       super.init(context)
-      context.schedule(punctuatorInterval, PunctuationType.WALL_CLOCK_TIME, punctuate)
+      context.schedule(punctuatorInterval, PunctuationType.WALL_CLOCK_TIME, punctuate: Punctuator)
     }
 
     def punctuate(currentTimestamp: Long): Unit

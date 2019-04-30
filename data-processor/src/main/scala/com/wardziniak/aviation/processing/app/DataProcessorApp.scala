@@ -18,6 +18,6 @@ object DataProcessorApp
     .withBootstrapServer(bootstrapServer = "localhost:9092").build
   val applicationTopology: Topology = buildTopology
 
-  runStreamWithConfiguration(topology = applicationTopology, streamProperties = preProcessingAppConfig)
+//  runStreamWithConfiguration(topology = applicationTopology, streamProperties = preProcessingAppConfig)
 
 }
